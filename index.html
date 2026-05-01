@@ -1,0 +1,2971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AltivionX— 3D Drone Solutions</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0a0c10;
+    --paper: #f5f2ec;
+    --accent: #c8ff00;
+    --accent2: #00d4ff;
+    --muted: #6b7280;
+    --border: rgba(10,12,16,0.12);
+    --card-bg: #ffffff;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 3rem;
+    background: rgba(245,242,236,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .logo span { color: var(--accent); background: var(--ink); padding: 0 4px; }
+  nav ul { list-style: none; display: flex; gap: 2.5rem; }
+  nav a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    text-decoration: none;
+    color: var(--ink);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--muted); }
+  .nav-cta {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    background: var(--ink);
+    color: var(--accent) !important;
+    padding: 0.55rem 1.2rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.75; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    padding: 8rem 3rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(10,12,16,0.06) 39px, rgba(10,12,16,0.06) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(10,12,16,0.06) 39px, rgba(10,12,16,0.06) 40px);
+  }
+  .hero-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .hero-tag::before {
+    content: '';
+    display: inline-block;
+    width: 32px; height: 1px;
+    background: var(--muted);
+  }
+  .hero-left { position: relative; z-index: 1; }
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 8vw, 7rem);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin-bottom: 2rem;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--ink);
+  }
+  .hero p {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: #3a3a3a;
+    max-width: 440px;
+    margin-bottom: 2.5rem;
+  }
+  .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--accent);
+    padding: 1rem 2rem;
+    text-decoration: none;
+    transition: transform 0.15s;
+    display: inline-block;
+  }
+  .btn-primary:hover { transform: translateY(-2px); }
+  .btn-secondary {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--ink);
+    padding: 1rem 2rem;
+    text-decoration: none;
+    border: 1px solid var(--ink);
+    transition: background 0.2s, color 0.2s;
+    display: inline-block;
+  }
+  .btn-secondary:hover { background: var(--ink); color: var(--paper); }
+
+  /* DRONE SVG AREA */
+  .hero-right {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .drone-stage {
+    width: 100%; max-width: 520px;
+    aspect-ratio: 1;
+    position: relative;
+  }
+  .drone-svg { width: 100%; height: 100%; animation: float 4s ease-in-out infinite; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-18px); }
+  }
+  .orbit-ring {
+    position: absolute; inset: 0;
+    border: 1px dashed rgba(10,12,16,0.15);
+    border-radius: 50%;
+    animation: spin 18s linear infinite;
+  }
+  .orbit-ring:nth-child(2) {
+    inset: 8%;
+    animation-duration: 12s;
+    animation-direction: reverse;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .orbit-dot {
+    position: absolute;
+    top: -5px; left: 50%;
+    width: 9px; height: 9px;
+    background: var(--accent);
+    border-radius: 50%;
+    transform: translateX(-50%);
+  }
+  .stat-chips {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    margin-top: 2rem;
+    position: relative; z-index: 1;
+  }
+  .stat-chip {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 0.75rem 1.25rem;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .stat-chip .val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.05em;
+    line-height: 1;
+  }
+  .stat-chip .lbl {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* TICKER */
+  .ticker {
+    background: var(--ink);
+    color: var(--accent);
+    padding: 0.75rem 0;
+    overflow: hidden;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    white-space: nowrap;
+  }
+  .ticker-inner {
+    display: inline-block;
+    animation: ticker 28s linear infinite;
+  }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .ticker-sep { color: rgba(200,255,0,0.4); margin: 0 2rem; }
+
+  /* SECTION SHARED */
+  section { padding: 6rem 3rem; }
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .section-label::before {
+    content: '//';
+    color: var(--accent);
+    background: var(--ink);
+    padding: 0 4px;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    letter-spacing: 0.03em;
+    line-height: 1;
+    margin-bottom: 1.5rem;
+  }
+
+  /* SERVICES */
+  #services { background: var(--ink); color: var(--paper); }
+  #services .section-label { color: rgba(245,242,236,0.45); }
+  #services .section-title { color: var(--paper); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1px;
+    margin-top: 3rem;
+    background: rgba(245,242,236,0.1);
+    border: 1px solid rgba(245,242,236,0.1);
+  }
+  .service-card {
+    background: var(--ink);
+    padding: 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+    cursor: default;
+  }
+  .service-card:hover { background: #111318; }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    color: rgba(245,242,236,0.08);
+    position: absolute;
+    top: 1rem; right: 1.5rem;
+    line-height: 1;
+  }
+  .service-icon {
+    width: 44px; height: 44px;
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+  }
+  .service-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+    color: var(--paper);
+  }
+  .service-card p {
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: rgba(245,242,236,0.6);
+  }
+  .service-tag {
+    display: inline-block;
+    margin-top: 1.25rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(200,255,0,0.3);
+    padding: 0.3rem 0.65rem;
+  }
+
+  /* ABOUT / HOW */
+  #about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+  .about-visual {
+    position: relative;
+  }
+  .about-frame {
+    background: var(--ink);
+    padding: 3rem;
+    position: relative;
+  }
+  .about-frame::after {
+    content: '';
+    position: absolute;
+    bottom: -12px; right: -12px;
+    width: 100%; height: 100%;
+    border: 1px solid var(--ink);
+    z-index: -1;
+  }
+  .process-steps { margin-top: 2.5rem; }
+  .step {
+    display: flex; gap: 1.5rem; align-items: flex-start;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .step:last-child { border-bottom: none; margin-bottom: 0; }
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--accent);
+    background: var(--ink);
+    padding: 0 0.5rem;
+    line-height: 1.1;
+    flex-shrink: 0;
+    min-width: 48px;
+    text-align: center;
+  }
+  .step h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .step p { font-size: 0.875rem; color: var(--muted); line-height: 1.6; }
+
+  /* SPECS */
+  #specs { background: #f0ede6; }
+  .specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .spec-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 2rem 1.5rem;
+    position: relative;
+  }
+  .spec-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.25rem;
+  }
+  .spec-unit {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--muted);
+    vertical-align: super;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    margin-left: 2px;
+  }
+  .spec-lbl {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.5rem;
+  }
+  .spec-bar {
+    height: 2px;
+    background: rgba(10,12,16,0.08);
+    margin-top: 1rem;
+    position: relative;
+  }
+  .spec-fill {
+    height: 100%;
+    background: var(--ink);
+    transition: width 1s ease;
+  }
+
+  /* SECTORS */
+  #sectors {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  #sectors .section-label { color: rgba(245,242,236,0.4); }
+  #sectors .section-title { color: var(--paper); }
+  .sectors-list {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .sector-row {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(245,242,236,0.08);
+    transition: padding-left 0.3s;
+    cursor: default;
+  }
+  .sector-row:hover { padding-left: 1rem; }
+  .sector-row:hover .sector-arrow { opacity: 1; transform: translateX(0); }
+  .sector-idx {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: rgba(245,242,236,0.25);
+    min-width: 28px;
+  }
+  .sector-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.04em;
+    flex: 1;
+  }
+  .sector-desc {
+    font-size: 0.8rem;
+    color: rgba(245,242,236,0.4);
+    max-width: 300px;
+    line-height: 1.5;
+  }
+  .sector-arrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    color: var(--accent);
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: all 0.3s;
+  }
+  .sector-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(200,255,0,0.3);
+    padding: 0.2rem 0.5rem;
+    white-space: nowrap;
+  }
+
+  /* CONTACT */
+  #contact {
+    background: var(--paper);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  .contact-info p {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+  .contact-details { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+  .contact-item {
+    display: flex; gap: 1rem; align-items: flex-start;
+  }
+  .contact-item-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    min-width: 70px;
+    padding-top: 2px;
+  }
+  .contact-item-val {
+    font-size: 0.9rem;
+    color: var(--ink);
+  }
+  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+  .form-field { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-field label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 0.85rem 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+    resize: vertical;
+  }
+  .form-field input:focus,
+  .form-field select:focus,
+  .form-field textarea:focus { border-color: var(--ink); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .submit-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--accent);
+    border: none;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-top: 0.5rem;
+    align-self: flex-start;
+  }
+  .submit-btn:hover { opacity: 0.8; }
+
+  /* FOOTER */
+  footer {
+    background: #060709;
+    color: rgba(245,242,236,0.4);
+    padding: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: var(--paper);
+    letter-spacing: 0.08em;
+  }
+  .footer-logo span { color: var(--accent); background: var(--ink); padding: 0 3px; }
+  footer p { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 0.15em; }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(245,242,236,0.35);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--accent); }
+
+  /* FLEET SECTION */
+  #fleet {
+    background: var(--paper);
+    padding: 6rem 3rem;
+    overflow: hidden;
+  }
+  .fleet-intro {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 4rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .fleet-intro p {
+    max-width: 400px;
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--muted);
+  }
+  .fleet-tabs {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .fleet-tab {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.2rem;
+    background: transparent;
+    border: none;
+    border-right: 1px solid var(--border);
+    cursor: pointer;
+    color: var(--muted);
+    transition: background 0.2s, color 0.2s;
+  }
+  .fleet-tab:last-child { border-right: none; }
+  .fleet-tab.active, .fleet-tab:hover {
+    background: var(--ink);
+    color: var(--accent);
+  }
+
+  .drone-fleet-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .drone-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .drone-card:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(10,12,16,0.12); z-index: 2; }
+  .drone-card:hover .drone-glow { opacity: 1; }
+  .drone-card:hover .drone-label-bar { background: var(--ink); }
+  .drone-card:hover .drone-label-bar h3 { color: var(--accent); }
+
+  .drone-viewport {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: #0d0f14;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .drone-viewport::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(200,255,0,0.03) 19px, rgba(200,255,0,0.03) 20px),
+      repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(200,255,0,0.03) 19px, rgba(200,255,0,0.03) 20px);
+  }
+  .drone-glow {
+    position: absolute;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,255,0,0.08) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+  .drone-svg-wrap {
+    position: relative; z-index: 1;
+    width: 75%;
+  }
+  .drone-svg-wrap svg { width: 100%; height: auto; }
+
+  .float-anim { animation: floatD 3.5s ease-in-out infinite; }
+  .float-anim-slow { animation: floatD 5s ease-in-out infinite 0.5s; }
+  .float-anim-fast { animation: floatD 2.8s ease-in-out infinite 0.2s; }
+  @keyframes floatD {
+    0%,100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-10px) rotate(0.8deg); }
+    66% { transform: translateY(-5px) rotate(-0.5deg); }
+  }
+  .rotor-spin { animation: rotorSpin 0.3s linear infinite; transform-origin: center; }
+  .rotor-spin2 { animation: rotorSpin 0.3s linear infinite reverse; transform-origin: center; }
+  @keyframes rotorSpin { to { transform: rotate(360deg); } }
+
+  .drone-label-bar {
+    padding: 1.25rem 1.5rem;
+    background: var(--card-bg);
+    border-top: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  .drone-label-bar h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.3rem;
+    transition: color 0.3s;
+  }
+  .drone-label-bar p {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+  }
+  .drone-meta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .drone-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .drone-meta-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+  }
+  .drone-meta-lbl {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .drone-type-badge {
+    position: absolute;
+    top: 1rem; left: 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: rgba(10,12,16,0.75);
+    color: var(--accent);
+    padding: 0.25rem 0.6rem;
+    border: 1px solid rgba(200,255,0,0.3);
+    z-index: 2;
+  }
+  .scanline {
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: rgba(200,255,0,0.15);
+    animation: scanMove 4s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 3;
+  }
+  @keyframes scanMove {
+    0% { top: 10%; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { top: 90%; opacity: 0; }
+  }
+
+  @media (max-width: 900px) {
+    .drone-fleet-grid { grid-template-columns: 1fr; }
+    .fleet-intro { flex-direction: column; align-items: flex-start; }
+  }
+  @media (max-width: 640px) {
+    .drone-fleet-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-left > * {
+    animation: fadeUp 0.7s ease both;
+  }
+  .hero-left .hero-tag { animation-delay: 0.1s; }
+  .hero-left h1 { animation-delay: 0.2s; }
+  .hero-left p { animation-delay: 0.35s; }
+  .hero-left .btn-group { animation-delay: 0.5s; }
+  .stat-chips { animation: fadeUp 0.7s ease 0.65s both; }
+
+  /* ASSEMBLY SCROLL */
+  .assembly-scroll-container {
+    position: relative;
+    height: 700vh;
+  }
+  .assembly-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    background: #060709;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .asm-bg-grid {
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(200,255,0,0.03) 49px, rgba(200,255,0,0.03) 50px),
+      repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(200,255,0,0.03) 49px, rgba(200,255,0,0.03) 50px);
+  }
+  .asm-radial {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(200,255,0,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .asm-center {
+    position: relative;
+    width: min(90vw, 90vh);
+    height: min(90vw, 90vh);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .asm-drone-svg {
+    width: 100%; height: 100%;
+    position: relative; z-index: 2;
+  }
+
+  /* Each drone part starts hidden and enters from a direction */
+  .dp {
+    transition: opacity 0.7s ease, transform 0.8s cubic-bezier(0.34, 1.3, 0.64, 1);
+  }
+  .dp.hidden { opacity: 0; }
+  .dp.from-center { transform: scale(0.4); }
+  .dp.from-tl     { transform: translate(-80px,-80px) scale(0.7); }
+  .dp.from-tr     { transform: translate( 80px,-80px) scale(0.7); }
+  .dp.from-bl     { transform: translate(-80px, 80px) scale(0.7); }
+  .dp.from-br     { transform: translate( 80px, 80px) scale(0.7); }
+  .dp.from-top    { transform: translateY(-60px) scale(0.85); }
+  .dp.from-bottom { transform: translateY( 60px) scale(0.85); }
+  .dp.from-left   { transform: translateX(-60px) scale(0.9); }
+  .dp.from-right  { transform: translateX( 60px) scale(0.9); }
+  .dp.visible     { opacity: 1 !important; transform: translate(0,0) scale(1) !important; }
+
+  /* Rotor spin only activates when visible */
+  .asm-rotor { transform-origin: center; }
+  .asm-rotor.spin-on { animation: rotorSpin 0.25s linear infinite; }
+  .asm-rotor.spin-rev { animation: rotorSpin 0.25s linear infinite reverse; }
+
+  /* Power glow on body when powered */
+  .asm-body-powered { transition: filter 0.8s ease; }
+  .asm-body-powered.glow { filter: drop-shadow(0 0 8px rgba(200,255,0,0.5)); }
+
+  /* Info panel */
+  .asm-info {
+    position: absolute;
+    left: 3rem; top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    max-width: 220px;
+  }
+  .asm-step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    line-height: 1;
+    color: rgba(200,255,0,0.12);
+    letter-spacing: 0.02em;
+    transition: all 0.4s;
+  }
+  .asm-step-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.05em;
+    color: var(--paper);
+    margin-top: -1rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.4s;
+  }
+  .asm-step-desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    line-height: 1.65;
+    color: rgba(245,242,236,0.45);
+    transition: all 0.4s;
+  }
+
+  /* Progress sidebar */
+  .asm-progress-wrap {
+    position: absolute;
+    right: 2.5rem; top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    z-index: 10;
+  }
+  .asm-progress-track {
+    width: 2px;
+    height: 280px;
+    background: rgba(200,255,0,0.1);
+    position: relative;
+    border-radius: 2px;
+  }
+  .asm-progress-fill {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 0%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: height 0.1s linear;
+  }
+  .asm-step-dots {
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .asm-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: rgba(200,255,0,0.2);
+    transform: translateX(-2.5px);
+    transition: background 0.3s, transform 0.3s;
+    border: 1px solid transparent;
+  }
+  .asm-dot.active {
+    background: var(--accent);
+    transform: translateX(-2.5px) scale(1.4);
+    border-color: rgba(200,255,0,0.4);
+  }
+  .asm-progress-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(200,255,0,0.4);
+    margin-top: 1rem;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+
+  /* Floating callout labels next to parts */
+  .asm-callout {
+    position: absolute;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(10,12,16,0.8);
+    border: 1px solid rgba(200,255,0,0.25);
+    padding: 0.3rem 0.6rem;
+    pointer-events: none;
+    transition: opacity 0.5s ease 0.3s;
+    white-space: nowrap;
+    z-index: 5;
+  }
+  .asm-callout::before {
+    content: '';
+    position: absolute;
+    width: 20px; height: 1px;
+    background: rgba(200,255,0,0.4);
+  }
+  .asm-callout.hidden { opacity: 0; }
+  .asm-callout.visible { opacity: 1; }
+
+  /* Scroll hint */
+  .asm-scroll-hint {
+    position: absolute;
+    bottom: 2rem; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    z-index: 10;
+    transition: opacity 0.5s;
+  }
+  .asm-scroll-hint span {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(200,255,0,0.4);
+  }
+  .asm-arrow-down {
+    width: 20px; height: 30px;
+    border: 1px solid rgba(200,255,0,0.3);
+    border-radius: 10px;
+    position: relative;
+    display: flex; justify-content: center;
+  }
+  .asm-arrow-down::after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    width: 4px; height: 8px;
+    background: var(--accent);
+    border-radius: 2px;
+    animation: scrollBob 1.5s ease-in-out infinite;
+  }
+  @keyframes scrollBob {
+    0%,100% { top: 5px; opacity: 1; }
+    100% { top: 14px; opacity: 0; }
+  }
+
+  /* Power ring pulse */
+  @keyframes powerPulse {
+    0%,100% { opacity: 0.15; r: 55; }
+    50% { opacity: 0.5; r: 65; }
+  }
+  .power-ring { animation: powerPulse 2s ease-in-out infinite; }
+
+  /* Done banner */
+  .asm-done-banner {
+    position: absolute;
+    bottom: 3.5rem; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    background: rgba(10,12,16,0.85);
+    border: 1px solid rgba(200,255,0,0.35);
+    padding: 0.5rem 1.5rem;
+    opacity: 0;
+    transition: opacity 0.6s;
+    white-space: nowrap;
+  }
+  .asm-done-banner.show { opacity: 1; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    nav ul { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 6rem 1.5rem 3rem; }
+    .hero-right { display: none; }
+    section { padding: 4rem 1.5rem; }
+    #about, #contact { grid-template-columns: 1fr; gap: 3rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .sector-desc { display: none; }
+    footer { flex-direction: column; text-align: center; }
+    .asm-info { left: 1rem; max-width: 160px; }
+    .asm-progress-wrap { right: 0.75rem; }
+    .asm-step-num { font-size: 3rem; }
+    .asm-step-title { font-size: 1rem; }
+  }
+
+  /* ── SERVICES UPDATED ── */
+  #services { background: var(--ink); color: var(--paper); padding: 6rem 3rem; }
+  .services-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 3rem; flex-wrap: wrap; gap: 1.5rem;
+  }
+  .services-intro-p {
+    max-width: 400px; font-size: 0.9rem; line-height: 1.75;
+    color: rgba(245,242,236,0.5);
+  }
+  .service-features {
+    list-style: none; margin: 1rem 0 0; display: flex; flex-direction: column; gap: 0.4rem;
+  }
+  .service-features li {
+    font-size: 0.78rem; color: rgba(245,242,236,0.45); line-height: 1.5;
+    padding-left: 1rem; position: relative;
+  }
+  .service-features li::before {
+    content: '›'; position: absolute; left: 0; color: var(--accent); font-size: 0.9rem;
+  }
+  .services-pricing-strip {
+    margin-top: 3rem; border: 1px solid rgba(245,242,236,0.1);
+    display: flex; flex-wrap: wrap;
+  }
+  .pricing-item {
+    flex: 1; min-width: 200px; padding: 1.5rem 2rem;
+    display: flex; flex-direction: column; gap: 0.4rem;
+  }
+  .pricing-divider { width: 1px; background: rgba(245,242,236,0.1); }
+  .pricing-tier {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem;
+    letter-spacing: 0.05em; color: var(--accent);
+  }
+  .pricing-desc { font-size: 0.78rem; color: rgba(245,242,236,0.45); line-height: 1.5; }
+  .pricing-cta {
+    font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--accent); text-decoration: none; margin-top: 0.5rem;
+    transition: opacity 0.2s;
+  }
+  .pricing-cta:hover { opacity: 0.6; }
+
+  /* ── TECHNOLOGY UPDATED ── */
+  .tech-pipeline {
+    display: flex; align-items: flex-start; gap: 0; flex-wrap: wrap;
+    margin-bottom: 4rem; border: 1px solid var(--border); overflow: hidden;
+  }
+  .tech-pipe-step {
+    flex: 1; min-width: 180px; padding: 2rem 1.5rem;
+    border-right: 1px solid var(--border); position: relative;
+    transition: background 0.2s;
+  }
+  .tech-pipe-step:last-child { border-right: none; }
+  .tech-pipe-step:hover { background: #f0ede6; }
+  .tech-pipe-step::before {
+    content: attr(data-step); position: absolute; top: 1rem; right: 1rem;
+    font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem;
+    color: rgba(10,12,16,0.05); line-height: 1; letter-spacing: 0.02em;
+  }
+  .tech-pipe-icon {
+    width: 44px; height: 44px; background: var(--ink); display: flex;
+    align-items: center; justify-content: center; margin-bottom: 1rem;
+  }
+  .tech-pipe-label {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.04em;
+    line-height: 1.1; margin-bottom: 0.75rem;
+  }
+  .tech-pipe-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+  .tech-pipe-arrow {
+    padding: 2rem 0; color: rgba(10,12,16,0.2); font-size: 1.5rem;
+    align-self: center; display: flex; align-items: center;
+    flex-shrink: 0;
+  }
+  .tech-pillars {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1px; background: var(--border); border: 1px solid var(--border);
+    margin-bottom: 4rem;
+  }
+  .tech-pillar {
+    background: var(--paper); padding: 2rem; transition: background 0.2s;
+  }
+  .tech-pillar:hover { background: #f0ede6; }
+  .tech-pillar-head {
+    display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;
+  }
+  .tech-pillar-num {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.1em;
+    background: var(--ink); color: var(--accent); padding: 0.1rem 0.45rem;
+    line-height: 1.4; flex-shrink: 0;
+  }
+  .tech-pillar-title {
+    font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em;
+    text-transform: uppercase; font-weight: 700;
+  }
+  .tech-pillar p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; margin-bottom: 1rem; }
+  .tech-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .tech-tags span {
+    font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em;
+    text-transform: uppercase; border: 1px solid var(--border); padding: 0.2rem 0.5rem;
+    color: var(--muted);
+  }
+  .tech-platform-strip {
+    display: grid; grid-template-columns: 280px 1fr; gap: 3rem; align-items: center;
+    border: 1px solid var(--border); padding: 2.5rem;
+  }
+  @media (max-width: 900px) {
+    .tech-platform-strip { grid-template-columns: 1fr; }
+    .tech-pipe-arrow { display: none; }
+  }
+
+  /* ── SPECS UPDATED ── */
+  #specs { background: #f0ede6; padding: 6rem 3rem; }
+  .specs-top {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1.5rem;
+  }
+  .specs-model-tabs { display: flex; border: 1px solid var(--border); overflow: hidden; }
+  .spec-tab {
+    font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 0.65rem 1.25rem; background: transparent;
+    border: none; border-right: 1px solid var(--border); cursor: pointer;
+    color: var(--muted); transition: all 0.2s;
+  }
+  .spec-tab:last-child { border-right: none; }
+  .spec-tab.active, .spec-tab:hover { background: var(--ink); color: var(--accent); }
+  .spec-extra-row {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: 1.5rem;
+  }
+  .spec-extra-item {
+    background: var(--card-bg); padding: 1.25rem 1.5rem;
+    display: flex; flex-direction: column; gap: 0.3rem;
+  }
+  .spec-extra-lbl {
+    font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .spec-extra-val { font-size: 0.82rem; color: var(--ink); line-height: 1.5; }
+
+  /* ── SECTORS UPDATED ── */
+  #sectors { background: var(--ink); color: var(--paper); padding: 6rem 3rem; }
+  .sectors-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 3rem; flex-wrap: wrap; gap: 1.5rem;
+  }
+  .sectors-intro-p {
+    max-width: 380px; font-size: 0.9rem; line-height: 1.75;
+    color: rgba(245,242,236,0.45);
+  }
+  .sectors-card-grid {
+    display: flex; flex-direction: column; gap: 1px;
+    border: 1px solid rgba(245,242,236,0.08);
+  }
+  .sector-card {
+    background: rgba(245,242,236,0.02); border-bottom: 1px solid rgba(245,242,236,0.06);
+    overflow: hidden; cursor: pointer;
+    transition: background 0.25s;
+  }
+  .sector-card:hover { background: rgba(245,242,236,0.04); }
+  .sector-card:last-child { border-bottom: none; }
+  .sector-card-head {
+    display: flex; align-items: center; gap: 1.25rem; padding: 1.25rem 1.5rem;
+  }
+  .sector-card-idx {
+    font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 0.15em;
+    color: rgba(245,242,236,0.2); min-width: 24px;
+  }
+  .sector-card-icon { flex-shrink: 0; }
+  .sector-card-name {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.05em;
+    flex: 1;
+  }
+  .sector-card-badges { display: flex; gap: 0.4rem; flex-shrink: 0; }
+  .sector-card-badges .sector-badge {
+    font-family: 'Space Mono', monospace; font-size: 0.52rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent);
+    border: 1px solid rgba(200,255,0,0.3); padding: 0.18rem 0.45rem;
+  }
+  .sector-card-toggle {
+    font-family: 'Space Mono', monospace; font-size: 1rem; color: rgba(245,242,236,0.3);
+    transition: transform 0.3s, color 0.3s; flex-shrink: 0; min-width: 20px;
+    text-align: center;
+  }
+  .sector-card.open .sector-card-toggle { transform: rotate(45deg); color: var(--accent); }
+  .sector-card-body {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+    padding: 0 1.5rem;
+  }
+  .sector-card.open .sector-card-body {
+    max-height: 300px; padding: 0 1.5rem 1.5rem;
+  }
+  .sector-card-body p { font-size: 0.85rem; line-height: 1.75; color: rgba(245,242,236,0.55); margin-bottom: 1.25rem; }
+  .sector-outcomes { display: flex; gap: 2rem; flex-wrap: wrap; }
+  .sector-outcome { display: flex; flex-direction: column; gap: 2px; }
+  .outcome-num {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.04em;
+    color: var(--accent); line-height: 1;
+  }
+  .outcome-lbl {
+    font-family: 'Space Mono', monospace; font-size: 0.56rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: rgba(245,242,236,0.35);
+  }
+
+  /* ── CONTACT UPDATED ── */
+  #contact { background: var(--paper); padding: 6rem 3rem; }
+  .contact-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 3.5rem; flex-wrap: wrap; gap: 2rem;
+  }
+  .contact-badges { display: flex; gap: 1rem; flex-wrap: wrap; align-self: flex-end; }
+  .contact-badge {
+    border: 1px solid var(--border); padding: 1rem 1.25rem;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .cbadge-val {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.05em; line-height: 1;
+  }
+  .cbadge-lbl {
+    font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .contact-body {
+    display: grid; grid-template-columns: 1fr 1.5fr; gap: 4rem; align-items: start;
+  }
+  .contact-info-col { display: flex; flex-direction: column; gap: 2rem; }
+  .contact-map { border: 1px solid var(--border); overflow: hidden; }
+  .contact-social { display: flex; flex-direction: column; gap: 0.75rem; }
+  .social-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .social-link {
+    font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink); text-decoration: none;
+    border-bottom: 1px solid var(--border); padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .social-link:hover { color: var(--muted); border-color: var(--muted); }
+  .contact-form-col { display: flex; flex-direction: column; gap: 0; }
+  .form-section-label {
+    font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);
+  }
+  @media (max-width: 900px) {
+    .contact-body { grid-template-columns: 1fr; gap: 2.5rem; }
+    .sectors-header, .services-header { flex-direction: column; align-items: flex-start; }
+    .specs-top { flex-direction: column; align-items: flex-start; }
+    .contact-top { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">Altivion<span>X</span></a>
+  <ul>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#fleet">Fleet</a></li>
+    <li><a href="#about">Technology</a></li>
+    <li><a href="#specs">Specs</a></li>
+    <li><a href="#sectors">Sectors</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get a Demo</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+
+  <div class="hero-left">
+    <div class="hero-tag">AltivionX — Est. 2026</div>
+    <h1>AERIAL<br><em>INTEL</em><br>REBORN</h1>
+    <p>3D drone systems engineered for precision agriculture, LIDAR mapping, and real-time surveillance. Delivered as DaaS and SaaS — zero infrastructure overhead, maximum field intelligence.</p>
+    <div class="btn-group">
+      <a href="#services" class="btn-primary">Explore Solutions</a>
+      <a href="#contact" class="btn-secondary">Request Demo</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="drone-stage">
+      <div class="orbit-ring"><div class="orbit-dot"></div></div>
+      <div class="orbit-ring"><div class="orbit-dot"></div></div>
+
+      <!-- DRONE SVG -->
+      <svg class="drone-svg" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Shadow -->
+        <ellipse cx="200" cy="370" rx="70" ry="8" fill="rgba(10,12,16,0.08)"/>
+
+        <!-- Rotor arms -->
+        <line x1="200" y1="200" x2="100" y2="110" stroke="#0a0c10" stroke-width="6" stroke-linecap="round"/>
+        <line x1="200" y1="200" x2="300" y2="110" stroke="#0a0c10" stroke-width="6" stroke-linecap="round"/>
+        <line x1="200" y1="200" x2="100" y2="290" stroke="#0a0c10" stroke-width="6" stroke-linecap="round"/>
+        <line x1="200" y1="200" x2="300" y2="290" stroke="#0a0c10" stroke-width="6" stroke-linecap="round"/>
+
+        <!-- Motor housings -->
+        <circle cx="100" cy="110" r="24" fill="#0a0c10"/>
+        <circle cx="300" cy="110" r="24" fill="#0a0c10"/>
+        <circle cx="100" cy="290" r="24" fill="#0a0c10"/>
+        <circle cx="300" cy="290" r="24" fill="#0a0c10"/>
+        <!-- Rotor discs -->
+        <ellipse cx="100" cy="110" rx="44" ry="8" fill="rgba(200,255,0,0.18)" stroke="#c8ff00" stroke-width="1"/>
+        <ellipse cx="300" cy="110" rx="44" ry="8" fill="rgba(200,255,0,0.18)" stroke="#c8ff00" stroke-width="1"/>
+        <ellipse cx="100" cy="290" rx="44" ry="8" fill="rgba(0,212,255,0.12)" stroke="#00d4ff" stroke-width="1"/>
+        <ellipse cx="300" cy="290" rx="44" ry="8" fill="rgba(0,212,255,0.12)" stroke="#00d4ff" stroke-width="1"/>
+
+        <!-- Body - main chassis -->
+        <rect x="160" y="160" width="80" height="80" rx="6" fill="#0a0c10"/>
+        <rect x="168" y="168" width="64" height="64" rx="4" fill="#1a1d24"/>
+
+        <!-- Camera/LIDAR sensor pod -->
+        <rect x="178" y="215" width="44" height="28" rx="3" fill="#0a0c10"/>
+        <circle cx="200" cy="229" r="10" fill="#111318" stroke="#c8ff00" stroke-width="1.5"/>
+        <circle cx="200" cy="229" r="5" fill="#c8ff00" opacity="0.7"/>
+
+        <!-- Top detail -->
+        <rect x="182" y="163" width="36" height="10" rx="2" fill="#00d4ff" opacity="0.6"/>
+
+        <!-- LED indicators -->
+        <circle cx="170" cy="175" r="3" fill="#c8ff00"/>
+        <circle cx="222" cy="175" r="3" fill="#00d4ff"/>
+
+        <!-- Landing legs -->
+        <line x1="175" y1="243" x2="165" y2="265" stroke="#0a0c10" stroke-width="3" stroke-linecap="round"/>
+        <line x1="225" y1="243" x2="235" y2="265" stroke="#0a0c10" stroke-width="3" stroke-linecap="round"/>
+        <line x1="155" y1="265" x2="180" y2="265" stroke="#0a0c10" stroke-width="3" stroke-linecap="round"/>
+        <line x1="220" y1="265" x2="245" y2="265" stroke="#0a0c10" stroke-width="3" stroke-linecap="round"/>
+
+        <!-- Scan lines animation hint -->
+        <line x1="145" y1="229" x2="255" y2="229" stroke="#c8ff00" stroke-width="0.5" stroke-dasharray="4 4" opacity="0.4"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="stat-chips">
+    <div class="stat-chip"><span class="val">4K</span><span class="lbl">Resolution Imaging</span></div>
+    <div class="stat-chip"><span class="val">2cm</span><span class="lbl">LIDAR Accuracy</span></div>
+    <div class="stat-chip"><span class="val">90+</span><span class="lbl">Min Flight Time</span></div>
+    <div class="stat-chip"><span class="val">SaaS</span><span class="lbl">Cloud Platform</span></div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <span class="ticker-inner">
+    DRONE AS A SERVICE &nbsp;<span class="ticker-sep">◆</span>&nbsp;
+    PRECISION AGRICULTURE &nbsp;<span class="ticker-sep">◆</span>&nbsp;
+    LIDAR POINT CLOUDS &nbsp;<span class="ticker-sep">◆</span>&nbsp;
+    3D AERIAL MAPPING &nbsp;<span class="ticker-sep">◆</span>&nbsp;
+    SURVEILLANCE SYSTEMS &nbsp;<span class="ticker-sep">◆</span>&nbsp;
+    SOFTWARE AS A SERVICE &nbsp;<span class="ticker-sep">◆</span>&nbsp;
+    REAL-TIME ANALYTICS &nbsp;<span class="ticker-sep">◆</span>&nbsp;
+    MULTISPECTRAL IMAGING &nbsp;<span class="ticker-sep">◆</span>&nbsp;
+    DRONE AS A SERVICE &nbsp;<span class="ticker-sep">◆</span>&nbsp;
+    PRECISION AGRICULTURE &nbsp;<span class="ticker-sep">◆</span>&nbsp;
+    LIDAR POINT CLOUDS &nbsp;<span class="ticker-sep">◆</span>&nbsp;
+    3D AERIAL MAPPING &nbsp;<span class="ticker-sep">◆</span>&nbsp;
+    SURVEILLANCE SYSTEMS &nbsp;<span class="ticker-sep">◆</span>&nbsp;
+    SOFTWARE AS A SERVICE &nbsp;<span class="ticker-sep">◆</span>
+  </span>
+</div>
+
+<!-- DRONE ASSEMBLY SCROLL -->
+<div class="assembly-scroll-container" id="asm-container">
+  <div class="assembly-sticky" id="asm-sticky">
+    <div class="asm-bg-grid"></div>
+    <div class="asm-radial"></div>
+
+    <!-- Info Panel Left -->
+    <div class="asm-info">
+      <div class="asm-step-num" id="asm-num">00</div>
+      <div class="asm-step-title" id="asm-title">Initialising</div>
+      <div class="asm-step-desc" id="asm-desc">Scroll down to assemble the VX-D1 drone from individual components.</div>
+    </div>
+
+    <!-- Drone SVG Assembly Stage -->
+    <div class="asm-center">
+      <svg class="asm-drone-svg" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg" id="asm-svg">
+
+        <!-- ── PART 0: Targeting Reticle / Ground Plane ── -->
+        <g class="dp from-center hidden" id="dp0">
+          <!-- Outer reticle ring -->
+          <circle cx="250" cy="250" r="200" stroke="rgba(200,255,0,0.06)" stroke-width="1" stroke-dasharray="4 8"/>
+          <circle cx="250" cy="250" r="155" stroke="rgba(200,255,0,0.08)" stroke-width="0.5" stroke-dasharray="3 6"/>
+          <circle cx="250" cy="250" r="110" stroke="rgba(200,255,0,0.1)" stroke-width="0.5"/>
+          <!-- Crosshair lines -->
+          <line x1="250" y1="40"  x2="250" y2="95"  stroke="rgba(200,255,0,0.2)" stroke-width="0.8"/>
+          <line x1="250" y1="405" x2="250" y2="460" stroke="rgba(200,255,0,0.2)" stroke-width="0.8"/>
+          <line x1="40"  y1="250" x2="95"  y2="250" stroke="rgba(200,255,0,0.2)" stroke-width="0.8"/>
+          <line x1="405" y1="250" x2="460" y2="250" stroke="rgba(200,255,0,0.2)" stroke-width="0.8"/>
+          <!-- Corner brackets -->
+          <path d="M60 100 L60 60 L100 60"  stroke="rgba(200,255,0,0.35)" stroke-width="1.2" fill="none"/>
+          <path d="M440 100 L440 60 L400 60" stroke="rgba(200,255,0,0.35)" stroke-width="1.2" fill="none"/>
+          <path d="M60 400 L60 440 L100 440" stroke="rgba(200,255,0,0.35)" stroke-width="1.2" fill="none"/>
+          <path d="M440 400 L440 440 L400 440" stroke="rgba(200,255,0,0.35)" stroke-width="1.2" fill="none"/>
+          <!-- Tick marks -->
+          <line x1="250" y1="94"  x2="250" y2="104" stroke="rgba(200,255,0,0.3)" stroke-width="0.8"/>
+          <line x1="250" y1="396" x2="250" y2="406" stroke="rgba(200,255,0,0.3)" stroke-width="0.8"/>
+          <line x1="94"  y1="250" x2="104" y2="250" stroke="rgba(200,255,0,0.3)" stroke-width="0.8"/>
+          <line x1="396" y1="250" x2="406" y2="250" stroke="rgba(200,255,0,0.3)" stroke-width="0.8"/>
+          <!-- Center dot -->
+          <circle cx="250" cy="250" r="3" fill="rgba(200,255,0,0.4)"/>
+          <!-- Coordinate labels -->
+          <text x="256" y="88"  fill="rgba(200,255,0,0.3)" font-size="9" font-family="monospace">N</text>
+          <text x="256" y="418" fill="rgba(200,255,0,0.3)" font-size="9" font-family="monospace">S</text>
+          <text x="68"  y="254" fill="rgba(200,255,0,0.3)" font-size="9" font-family="monospace">W</text>
+          <text x="410" y="254" fill="rgba(200,255,0,0.3)" font-size="9" font-family="monospace">E</text>
+        </g>
+
+        <!-- ── PART 1: Central Body Hub ── -->
+        <g class="dp from-center hidden asm-body-powered" id="dp1">
+          <!-- Power ring (visible later when powered) -->
+          <circle class="power-ring" cx="250" cy="250" r="55" stroke="rgba(200,255,0,0)" stroke-width="2" fill="none" id="asm-power-ring"/>
+          <!-- Octagon outer shell -->
+          <polygon points="250,202 280,210 298,238 298,262 280,290 250,298 220,290 202,262 202,238 220,210" fill="#1c1f28" stroke="#2e3342" stroke-width="2"/>
+          <!-- Octagon face panels (3D effect) -->
+          <polygon points="250,206 278,213 295,240 295,260 278,287 250,294 222,287 205,260 205,240 222,213" fill="#13151e" stroke="rgba(200,255,0,0.15)" stroke-width="0.5"/>
+          <!-- Top face highlight -->
+          <polygon points="250,210 275,217 290,240 275,240 250,232 225,240 210,240 225,217" fill="#1e2130" stroke="none"/>
+          <!-- Body details - vents/panels -->
+          <rect x="232" y="228" width="36" height="6" rx="1" fill="#252a38" stroke="rgba(200,255,0,0.2)" stroke-width="0.5"/>
+          <rect x="235" y="238" width="30" height="4" rx="1" fill="#1c1f2a"/>
+          <rect x="235" y="245" width="30" height="4" rx="1" fill="#1c1f2a"/>
+          <rect x="235" y="252" width="30" height="4" rx="1" fill="#1c1f2a"/>
+          <rect x="235" y="259" width="30" height="4" rx="1" fill="#1c1f2a"/>
+          <!-- Center processor dot -->
+          <circle cx="250" cy="250" r="8" fill="#0e1018" stroke="rgba(200,255,0,0.3)" stroke-width="1"/>
+          <circle cx="250" cy="250" r="4" fill="rgba(200,255,0,0.2)"/>
+        </g>
+
+        <!-- ── PART 2: Front-Left Arm ── -->
+        <g class="dp from-tl hidden" id="dp2">
+          <!-- Arm tube -->
+          <line x1="222" y1="228" x2="142" y2="148" stroke="#2a2d3c" stroke-width="9" stroke-linecap="round"/>
+          <!-- Arm highlight edge -->
+          <line x1="222" y1="228" x2="142" y2="148" stroke="rgba(200,255,0,0.18)" stroke-width="2" stroke-linecap="round"/>
+          <!-- Arm structural ribs -->
+          <line x1="196" y1="202" x2="205" y2="193" stroke="rgba(200,255,0,0.1)" stroke-width="1.5"/>
+          <line x1="176" y1="182" x2="185" y2="173" stroke="rgba(200,255,0,0.1)" stroke-width="1.5"/>
+          <line x1="212" y1="218" x2="221" y2="209" stroke="rgba(200,255,0,0.08)" stroke-width="1.5"/>
+        </g>
+
+        <!-- ── PART 3: Front-Right Arm ── -->
+        <g class="dp from-tr hidden" id="dp3">
+          <line x1="278" y1="228" x2="358" y2="148" stroke="#2a2d3c" stroke-width="9" stroke-linecap="round"/>
+          <line x1="278" y1="228" x2="358" y2="148" stroke="rgba(200,255,0,0.18)" stroke-width="2" stroke-linecap="round"/>
+          <line x1="304" y1="202" x2="295" y2="193" stroke="rgba(200,255,0,0.1)" stroke-width="1.5"/>
+          <line x1="324" y1="182" x2="315" y2="173" stroke="rgba(200,255,0,0.1)" stroke-width="1.5"/>
+          <line x1="288" y1="218" x2="279" y2="209" stroke="rgba(200,255,0,0.08)" stroke-width="1.5"/>
+        </g>
+
+        <!-- ── PART 4: Rear-Left Arm ── -->
+        <g class="dp from-bl hidden" id="dp4">
+          <line x1="222" y1="272" x2="142" y2="352" stroke="#2a2d3c" stroke-width="9" stroke-linecap="round"/>
+          <line x1="222" y1="272" x2="142" y2="352" stroke="rgba(0,212,255,0.15)" stroke-width="2" stroke-linecap="round"/>
+          <line x1="196" y1="298" x2="205" y2="307" stroke="rgba(0,212,255,0.1)" stroke-width="1.5"/>
+          <line x1="176" y1="318" x2="185" y2="327" stroke="rgba(0,212,255,0.1)" stroke-width="1.5"/>
+        </g>
+
+        <!-- ── PART 5: Rear-Right Arm ── -->
+        <g class="dp from-br hidden" id="dp5">
+          <line x1="278" y1="272" x2="358" y2="352" stroke="#2a2d3c" stroke-width="9" stroke-linecap="round"/>
+          <line x1="278" y1="272" x2="358" y2="352" stroke="rgba(0,212,255,0.15)" stroke-width="2" stroke-linecap="round"/>
+          <line x1="304" y1="298" x2="295" y2="307" stroke="rgba(0,212,255,0.1)" stroke-width="1.5"/>
+          <line x1="324" y1="318" x2="315" y2="327" stroke="rgba(0,212,255,0.1)" stroke-width="1.5"/>
+        </g>
+
+        <!-- ── PART 6: Motor Nacelles ── -->
+        <g class="dp from-center hidden" id="dp6">
+          <!-- FL motor -->
+          <circle cx="142" cy="148" r="28" fill="#181b26" stroke="#252a38" stroke-width="2"/>
+          <circle cx="142" cy="148" r="22" fill="#111421" stroke="rgba(200,255,0,0.2)" stroke-width="0.8"/>
+          <circle cx="142" cy="148" r="10" fill="#0d1018" stroke="rgba(200,255,0,0.4)" stroke-width="1"/>
+          <circle cx="142" cy="148" r="4"  fill="#c8ff00" opacity="0.6"/>
+          <!-- FR motor -->
+          <circle cx="358" cy="148" r="28" fill="#181b26" stroke="#252a38" stroke-width="2"/>
+          <circle cx="358" cy="148" r="22" fill="#111421" stroke="rgba(200,255,0,0.2)" stroke-width="0.8"/>
+          <circle cx="358" cy="148" r="10" fill="#0d1018" stroke="rgba(200,255,0,0.4)" stroke-width="1"/>
+          <circle cx="358" cy="148" r="4"  fill="#c8ff00" opacity="0.6"/>
+          <!-- RL motor -->
+          <circle cx="142" cy="352" r="28" fill="#181b26" stroke="#252a38" stroke-width="2"/>
+          <circle cx="142" cy="352" r="22" fill="#111421" stroke="rgba(0,212,255,0.15)" stroke-width="0.8"/>
+          <circle cx="142" cy="352" r="10" fill="#0d1018" stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
+          <circle cx="142" cy="352" r="4"  fill="#00d4ff" opacity="0.5"/>
+          <!-- RR motor -->
+          <circle cx="358" cy="352" r="28" fill="#181b26" stroke="#252a38" stroke-width="2"/>
+          <circle cx="358" cy="352" r="22" fill="#111421" stroke="rgba(0,212,255,0.15)" stroke-width="0.8"/>
+          <circle cx="358" cy="352" r="10" fill="#0d1018" stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
+          <circle cx="358" cy="352" r="4"  fill="#00d4ff" opacity="0.5"/>
+        </g>
+
+        <!-- ── PART 7: Rotor Blades ── -->
+        <g class="dp from-center hidden" id="dp7">
+          <!-- FL rotor - CW -->
+          <g class="asm-rotor" id="rot-fl" style="transform-origin:142px 148px">
+            <ellipse cx="142" cy="148" rx="50" ry="7" fill="rgba(200,255,0,0.1)" stroke="#c8ff00" stroke-width="0.8"/>
+            <line x1="92"  y1="148" x2="192" y2="148" stroke="rgba(200,255,0,0.25)" stroke-width="1.5"/>
+            <line x1="142" y1="98"  x2="142" y2="198" stroke="rgba(200,255,0,0.15)" stroke-width="1"/>
+          </g>
+          <!-- FR rotor - CCW -->
+          <g class="asm-rotor" id="rot-fr" style="transform-origin:358px 148px">
+            <ellipse cx="358" cy="148" rx="50" ry="7" fill="rgba(200,255,0,0.1)" stroke="#c8ff00" stroke-width="0.8"/>
+            <line x1="308" y1="148" x2="408" y2="148" stroke="rgba(200,255,0,0.25)" stroke-width="1.5"/>
+            <line x1="358" y1="98"  x2="358" y2="198" stroke="rgba(200,255,0,0.15)" stroke-width="1"/>
+          </g>
+          <!-- RL rotor - CCW -->
+          <g class="asm-rotor" id="rot-rl" style="transform-origin:142px 352px">
+            <ellipse cx="142" cy="352" rx="50" ry="7" fill="rgba(0,212,255,0.08)" stroke="#00d4ff" stroke-width="0.8"/>
+            <line x1="92"  y1="352" x2="192" y2="352" stroke="rgba(0,212,255,0.2)" stroke-width="1.5"/>
+            <line x1="142" y1="302" x2="142" y2="402" stroke="rgba(0,212,255,0.15)" stroke-width="1"/>
+          </g>
+          <!-- RR rotor - CW -->
+          <g class="asm-rotor" id="rot-rr" style="transform-origin:358px 352px">
+            <ellipse cx="358" cy="352" rx="50" ry="7" fill="rgba(0,212,255,0.08)" stroke="#00d4ff" stroke-width="0.8"/>
+            <line x1="308" y1="352" x2="408" y2="352" stroke="rgba(0,212,255,0.2)" stroke-width="1.5"/>
+            <line x1="358" y1="302" x2="358" y2="402" stroke="rgba(0,212,255,0.15)" stroke-width="1"/>
+          </g>
+        </g>
+
+        <!-- ── PART 8: Camera / Payload Gimbal ── -->
+        <g class="dp from-bottom hidden" id="dp8">
+          <!-- Gimbal mount arm -->
+          <rect x="240" y="295" width="20" height="16" rx="2" fill="#1c1f28" stroke="rgba(200,255,0,0.25)" stroke-width="1"/>
+          <!-- Gimbal yoke -->
+          <path d="M233 308 Q233 324 250 324 Q267 324 267 308" stroke="rgba(200,255,0,0.3)" stroke-width="1.5" fill="none"/>
+          <!-- Camera body -->
+          <rect x="232" y="316" width="36" height="24" rx="4" fill="#0e1018" stroke="rgba(200,255,0,0.5)" stroke-width="1.2"/>
+          <!-- Lens barrel -->
+          <circle cx="250" cy="328" r="9"  fill="#060709" stroke="#c8ff00" stroke-width="1.2"/>
+          <circle cx="250" cy="328" r="6"  fill="#0a0c14" stroke="rgba(200,255,0,0.4)" stroke-width="0.8"/>
+          <circle cx="250" cy="328" r="3.5" fill="rgba(200,255,0,0.5)"/>
+          <circle cx="247" cy="325" r="1.5" fill="rgba(255,255,255,0.5)"/>
+          <!-- Camera side detail -->
+          <rect x="234" y="318" width="6" height="4" rx="1" fill="#1c1f28"/>
+          <rect x="234" y="324" width="6" height="3" rx="1" fill="#c8ff00" opacity="0.6"/>
+          <!-- FOV indicator lines -->
+          <line x1="241" y1="340" x2="224" y2="365" stroke="rgba(200,255,0,0.15)" stroke-width="0.8" stroke-dasharray="3 3"/>
+          <line x1="259" y1="340" x2="276" y2="365" stroke="rgba(200,255,0,0.15)" stroke-width="0.8" stroke-dasharray="3 3"/>
+          <line x1="224" y1="365" x2="276" y2="365" stroke="rgba(200,255,0,0.1)" stroke-width="0.8"/>
+        </g>
+
+        <!-- ── PART 9: Landing Gear ── -->
+        <g class="dp from-bottom hidden" id="dp9">
+          <!-- Front skid bar -->
+          <line x1="210" y1="300" x2="290" y2="300" stroke="#2a2d3c" stroke-width="4" stroke-linecap="round"/>
+          <!-- Front legs -->
+          <line x1="218" y1="295" x2="210" y2="340" stroke="#2a2d3c" stroke-width="3" stroke-linecap="round"/>
+          <line x1="282" y1="295" x2="290" y2="340" stroke="#2a2d3c" stroke-width="3" stroke-linecap="round"/>
+          <!-- Front foot rail -->
+          <line x1="200" y1="340" x2="300" y2="340" stroke="#252830" stroke-width="4" stroke-linecap="round"/>
+          <line x1="200" y1="340" x2="300" y2="340" stroke="rgba(200,255,0,0.15)" stroke-width="1" stroke-linecap="round"/>
+          <!-- Landing pad dots FL/FR -->
+          <circle cx="207" cy="340" r="4" fill="#1c1f28" stroke="rgba(200,255,0,0.3)" stroke-width="1"/>
+          <circle cx="293" cy="340" r="4" fill="#1c1f28" stroke="rgba(200,255,0,0.3)" stroke-width="1"/>
+        </g>
+
+        <!-- ── PART 10: GPS Dome + Antenna Array ── -->
+        <g class="dp from-top hidden" id="dp10">
+          <!-- Main GPS dome -->
+          <ellipse cx="250" cy="212" rx="14" ry="8" fill="#1c1f28" stroke="rgba(200,255,0,0.4)" stroke-width="1.2"/>
+          <ellipse cx="250" cy="210" rx="11" ry="6" fill="#131620" stroke="rgba(200,255,0,0.25)" stroke-width="0.5"/>
+          <circle  cx="250" cy="209" r="3" fill="#c8ff00" opacity="0.7"/>
+          <!-- Antenna mast -->
+          <line x1="250" y1="200" x2="250" y2="185" stroke="#2e3342" stroke-width="3" stroke-linecap="round"/>
+          <!-- Antenna crossbar -->
+          <line x1="238" y1="188" x2="262" y2="188" stroke="#2e3342" stroke-width="2" stroke-linecap="round"/>
+          <line x1="238" y1="188" x2="262" y2="188" stroke="rgba(200,255,0,0.3)" stroke-width="0.8"/>
+          <!-- RTK side antennas -->
+          <line x1="226" y1="218" x2="218" y2="200" stroke="#252830" stroke-width="2" stroke-linecap="round"/>
+          <line x1="274" y1="218" x2="282" y2="200" stroke="#252830" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="218" cy="200" r="3.5" fill="#181b24" stroke="rgba(200,255,0,0.3)" stroke-width="0.8"/>
+          <circle cx="282" cy="200" r="3.5" fill="#181b24" stroke="rgba(200,255,0,0.3)" stroke-width="0.8"/>
+          <!-- Signal arcs -->
+          <path d="M236 195 Q250 186 264 195" stroke="rgba(200,255,0,0.25)" stroke-width="0.8" fill="none"/>
+          <path d="M229 190 Q250 178 271 190" stroke="rgba(200,255,0,0.15)" stroke-width="0.8" fill="none"/>
+        </g>
+
+        <!-- ── PART 11: Battery / Power Module ── -->
+        <g class="dp from-left hidden" id="dp11">
+          <!-- Battery pack -->
+          <rect x="202" y="232" width="28" height="12" rx="2" fill="#0e1018" stroke="rgba(200,255,0,0.4)" stroke-width="1"/>
+          <rect x="204" y="234" width="6" height="8" rx="1" fill="#c8ff00" opacity="0.7"/>
+          <rect x="212" y="234" width="6" height="8" rx="1" fill="#c8ff00" opacity="0.5"/>
+          <rect x="220" y="234" width="6" height="8" rx="1" fill="#c8ff00" opacity="0.3"/>
+          <rect x="228" y="235" width="2" height="6" rx="1" fill="#1c1f28" stroke="rgba(200,255,0,0.3)" stroke-width="0.5"/>
+          <!-- Connector -->
+          <rect x="197" y="235" width="5" height="6" rx="1" fill="#2a2d3c" stroke="rgba(200,255,0,0.25)" stroke-width="0.5"/>
+        </g>
+
+        <!-- ── PART 12: LED Status Lights + Power-on State ── -->
+        <g class="dp from-center hidden" id="dp12">
+          <!-- FL LED -->
+          <circle cx="142" cy="131" r="5" fill="#c8ff00" opacity="0.9"/>
+          <circle cx="142" cy="131" r="9" fill="rgba(200,255,0,0.15)"/>
+          <!-- FR LED -->
+          <circle cx="358" cy="131" r="5" fill="#c8ff00" opacity="0.9"/>
+          <circle cx="358" cy="131" r="9" fill="rgba(200,255,0,0.15)"/>
+          <!-- RL LED (red for rear) -->
+          <circle cx="142" cy="369" r="5" fill="#ff4040" opacity="0.9"/>
+          <circle cx="142" cy="369" r="9" fill="rgba(255,64,64,0.15)"/>
+          <!-- RR LED -->
+          <circle cx="358" cy="369" r="5" fill="#ff4040" opacity="0.9"/>
+          <circle cx="358" cy="369" r="9" fill="rgba(255,64,64,0.15)"/>
+          <!-- Body LEDs -->
+          <circle cx="234" cy="228" r="3" fill="#00d4ff" opacity="0.9"/>
+          <circle cx="234" cy="228" r="6" fill="rgba(0,212,255,0.2)"/>
+          <circle cx="266" cy="228" r="3" fill="#c8ff00" opacity="0.9"/>
+          <circle cx="266" cy="228" r="6" fill="rgba(200,255,0,0.2)"/>
+          <!-- Scanning laser line -->
+          <line x1="142" y1="148" x2="358" y2="148" stroke="rgba(200,255,0,0.08)" stroke-width="1" stroke-dasharray="5 8"/>
+          <line x1="142" y1="352" x2="358" y2="352" stroke="rgba(0,212,255,0.05)" stroke-width="1" stroke-dasharray="5 8"/>
+          <!-- Body glow ring on power -->
+          <circle cx="250" cy="250" r="58" stroke="rgba(200,255,0,0.2)" stroke-width="1.5" stroke-dasharray="4 5" fill="none"/>
+        </g>
+
+        <!-- ── Callout Labels (shown when part visible) ── -->
+        <!-- These are HTML overlays handled via JS below -->
+
+      </svg>
+
+      <!-- HTML callout labels positioned absolute over SVG -->
+      <div id="co0" class="asm-callout hidden" style="top:8%;left:52%;transform:none">TARGETING GRID</div>
+      <div id="co1" class="asm-callout hidden" style="top:46%;left:56%;transform:none">CENTRAL HUB</div>
+      <div id="co2" class="asm-callout hidden" style="top:14%;left:8%;transform:none">FRONT-L ARM</div>
+      <div id="co3" class="asm-callout hidden" style="top:14%;right:8%;transform:none;left:auto">FRONT-R ARM</div>
+      <div id="co4" class="asm-callout hidden" style="bottom:18%;left:8%;transform:none">REAR-L ARM</div>
+      <div id="co5" class="asm-callout hidden" style="bottom:18%;right:8%;transform:none;left:auto">REAR-R ARM</div>
+      <div id="co6" class="asm-callout hidden" style="top:32%;left:52%;transform:none">BRUSHLESS MOTORS</div>
+      <div id="co7" class="asm-callout hidden" style="top:22%;left:52%;transform:none">CARBON ROTORS</div>
+      <div id="co8" class="asm-callout hidden" style="bottom:10%;left:52%;transform:none">4K GIMBAL CAM</div>
+      <div id="co9" class="asm-callout hidden" style="bottom:6%;left:38%;transform:none">LANDING GEAR</div>
+      <div id="co10" class="asm-callout hidden" style="top:6%;left:52%;transform:none">RTK GPS DOME</div>
+      <div id="co11" class="asm-callout hidden" style="top:46%;left:4%;transform:none">SMART BATTERY</div>
+      <div id="co12" class="asm-callout hidden" style="top:38%;left:52%;transform:none">SYSTEM ONLINE</div>
+    </div>
+
+    <!-- Progress Sidebar -->
+    <div class="asm-progress-wrap">
+      <div class="asm-progress-track">
+        <div class="asm-progress-fill" id="asm-prog-fill"></div>
+        <div class="asm-step-dots" id="asm-dots"></div>
+      </div>
+      <span class="asm-progress-label">Assembly</span>
+    </div>
+
+    <!-- Scroll hint (fades out) -->
+    <div class="asm-scroll-hint" id="asm-hint">
+      <div class="asm-arrow-down"></div>
+      <span>Scroll to build</span>
+    </div>
+
+    <!-- Done banner -->
+    <div class="asm-done-banner" id="asm-done">◆ VX-D1 FULLY ASSEMBLED ◆</div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const STEPS = [
+    { num:'00', title:'Deploy Grid',       desc:'Establishing targeting coordinate grid and calibrating flight zone boundaries.' },
+    { num:'01', title:'Central Hub',       desc:'Core flight controller, IMU, and power distribution board seated in carbon-fibre chassis.' },
+    { num:'02', title:'Front-L Arm',       desc:'Carbon tubular boom arm, 300mm span, threaded motor mount at tip.' },
+    { num:'03', title:'Front-R Arm',       desc:'Mirrored starboard arm locked — frame rigidity confirmed.' },
+    { num:'04', title:'Rear-L Arm',        desc:'Port rear boom arm connects, completing the X-frame geometry.' },
+    { num:'05', title:'Rear-R Arm',        desc:'All four arms secured. Structural integrity at 100%.' },
+    { num:'06', title:'Motor Nacelles',    desc:'2400KV brushless motors torqued to spec on all four mounts.' },
+    { num:'07', title:'Carbon Rotors',     desc:'10-inch bi-directional carbon propellers balanced and seated. Pre-spin check initiated.' },
+    { num:'08', title:'4K Gimbal Cam',     desc:'3-axis stabilised gimbal with 4K/60fps sensor and 7° FOV. Downlink active.' },
+    { num:'09', title:'Landing Gear',      desc:'Retractable skid assembly deployed. Shock-absorbing feet fitted.' },
+    { num:'10', title:'RTK GPS Dome',      desc:'Dual-band RTK positioning dome. 1cm accuracy. Signal acquired.' },
+    { num:'11', title:'Smart Battery',     desc:'6S 10,000mAh LiPo locked. Estimated endurance 90 min.' },
+    { num:'12', title:'System Online',     desc:'All systems nominal. Motors armed. VX-D1 is ready for flight.' },
+  ];
+
+  const THRESHOLDS = [0.02, 0.08, 0.15, 0.22, 0.29, 0.36, 0.44, 0.52, 0.60, 0.67, 0.74, 0.81, 0.90];
+
+  const container = document.getElementById('asm-container');
+  const parts  = Array.from({length:13}, (_,i) => document.getElementById('dp'+i));
+  const callouts= Array.from({length:13}, (_,i) => document.getElementById('co'+i));
+  const progFill = document.getElementById('asm-prog-fill');
+  const dotsWrap = document.getElementById('asm-dots');
+  const numEl   = document.getElementById('asm-num');
+  const titleEl = document.getElementById('asm-title');
+  const descEl  = document.getElementById('asm-desc');
+  const hintEl  = document.getElementById('asm-hint');
+  const doneEl  = document.getElementById('asm-done');
+  const bodyPowered = document.getElementById('dp1');
+  const rotors  = ['rot-fl','rot-fr','rot-rl','rot-rr'].map(id => document.getElementById(id));
+
+  // Build step dots
+  THRESHOLDS.forEach((_,i) => {
+    const d = document.createElement('div');
+    d.className = 'asm-dot';
+    d.id = 'dot-'+i;
+    dotsWrap.appendChild(d);
+  });
+
+  let lastStep = -1;
+
+  function onScroll() {
+    if (!container) return;
+    const rect   = container.getBoundingClientRect();
+    const scrolled = -rect.top;
+    const total    = rect.height - window.innerHeight;
+    const prog     = Math.max(0, Math.min(1, scrolled / total));
+
+    // Progress bar
+    progFill.style.height = (prog * 100) + '%';
+
+    // Scroll hint fades out after 5%
+    hintEl.style.opacity = prog < 0.04 ? 1 : Math.max(0, 1 - (prog - 0.04) / 0.05);
+
+    // Reveal parts
+    let currentStep = -1;
+    THRESHOLDS.forEach((t, i) => {
+      const dot = document.getElementById('dot-'+i);
+      if (prog >= t) {
+        parts[i].classList.remove('hidden');
+        parts[i].classList.add('visible');
+        callouts[i].classList.remove('hidden');
+        callouts[i].classList.add('visible');
+        dot.classList.add('active');
+        currentStep = i;
+      } else {
+        dot.classList.remove('active');
+      }
+    });
+
+    // Rotors spin when rotors part (7) is visible
+    if (prog >= THRESHOLDS[7]) {
+      rotors.forEach((r, i) => {
+        r.classList.remove('spin-on','spin-rev');
+        r.classList.add(i % 2 === 0 ? 'spin-on' : 'spin-rev');
+      });
+    }
+
+    // Power glow when step 12
+    if (prog >= THRESHOLDS[12]) {
+      bodyPowered.classList.add('glow');
+    } else {
+      bodyPowered.classList.remove('glow');
+    }
+
+    // Done banner
+    if (prog >= THRESHOLDS[12]) {
+      doneEl.classList.add('show');
+    } else {
+      doneEl.classList.remove('show');
+    }
+
+    // Update info panel on step change
+    if (currentStep !== lastStep && currentStep >= 0) {
+      lastStep = currentStep;
+      numEl.style.opacity   = '0';
+      titleEl.style.opacity = '0';
+      descEl.style.opacity  = '0';
+      setTimeout(() => {
+        numEl.textContent   = STEPS[currentStep].num;
+        titleEl.textContent = STEPS[currentStep].title;
+        descEl.textContent  = STEPS[currentStep].desc;
+        numEl.style.opacity   = '1';
+        titleEl.style.opacity = '1';
+        descEl.style.opacity  = '1';
+      }, 120);
+    }
+  }
+
+  numEl.style.transition   = 'opacity 0.3s';
+  titleEl.style.transition = 'opacity 0.3s';
+  descEl.style.transition  = 'opacity 0.3s';
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════ FLEET ═══ -->
+<section id="fleet">
+  <div class="fleet-intro">
+    <div>
+      <div class="section-label">Our Fleet</div>
+      <div class="section-title">PURPOSE-BUILT<br>MACHINES</div>
+    </div>
+    <p>Every AltivionX drone is engineered for a specific mission profile — delivery, surveillance, or agricultural sensing. Modular payload bays allow rapid reconfiguration in the field.</p>
+  </div>
+
+  <div class="drone-fleet-grid">
+
+    <!-- DELIVERY DRONE -->
+    <div class="drone-card">
+      <div class="drone-viewport">
+        <div class="drone-glow"></div>
+        <div class="scanline"></div>
+        <span class="drone-type-badge">VX-D1 · Delivery</span>
+        <div class="drone-svg-wrap float-anim">
+          <svg viewBox="0 0 320 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Shadow -->
+            <ellipse cx="160" cy="250" rx="55" ry="6" fill="rgba(200,255,0,0.08)"/>
+
+            <!-- Arm cross structure -->
+            <line x1="160" y1="130" x2="55"  y2="55"  stroke="#3a3e4a" stroke-width="5" stroke-linecap="round"/>
+            <line x1="160" y1="130" x2="265" y2="55"  stroke="#3a3e4a" stroke-width="5" stroke-linecap="round"/>
+            <line x1="160" y1="130" x2="55"  y2="205" stroke="#3a3e4a" stroke-width="5" stroke-linecap="round"/>
+            <line x1="160" y1="130" x2="265" y2="205" stroke="#3a3e4a" stroke-width="5" stroke-linecap="round"/>
+
+            <!-- Arm highlight -->
+            <line x1="160" y1="130" x2="55"  y2="55"  stroke="rgba(200,255,0,0.2)" stroke-width="1.5"/>
+            <line x1="160" y1="130" x2="265" y2="55"  stroke="rgba(200,255,0,0.2)" stroke-width="1.5"/>
+            <line x1="160" y1="130" x2="55"  y2="205" stroke="rgba(0,212,255,0.15)" stroke-width="1.5"/>
+            <line x1="160" y1="130" x2="265" y2="205" stroke="rgba(0,212,255,0.15)" stroke-width="1.5"/>
+
+            <!-- Motor nacelles -->
+            <ellipse cx="55"  cy="55"  rx="22" ry="22" fill="#1c1f28" stroke="#2e3240" stroke-width="1.5"/>
+            <ellipse cx="265" cy="55"  rx="22" ry="22" fill="#1c1f28" stroke="#2e3240" stroke-width="1.5"/>
+            <ellipse cx="55"  cy="205" rx="22" ry="22" fill="#1c1f28" stroke="#2e3240" stroke-width="1.5"/>
+            <ellipse cx="265" cy="205" rx="22" ry="22" fill="#1c1f28" stroke="#2e3240" stroke-width="1.5"/>
+
+            <!-- Nacelle rim highlights -->
+            <circle cx="55"  cy="55"  r="22" stroke="rgba(200,255,0,0.25)" stroke-width="0.5"/>
+            <circle cx="265" cy="55"  r="22" stroke="rgba(200,255,0,0.25)" stroke-width="0.5"/>
+            <circle cx="55"  cy="205" r="22" stroke="rgba(0,212,255,0.2)" stroke-width="0.5"/>
+            <circle cx="265" cy="205" r="22" stroke="rgba(0,212,255,0.2)" stroke-width="0.5"/>
+
+            <!-- Rotor blades (spinning ellipses) -->
+            <g class="rotor-spin" style="transform-box:fill-box;transform-origin:55px 55px">
+              <ellipse cx="55" cy="55" rx="38" ry="5" fill="rgba(200,255,0,0.13)" stroke="#c8ff00" stroke-width="0.8"/>
+            </g>
+            <g class="rotor-spin2" style="transform-box:fill-box;transform-origin:265px 55px">
+              <ellipse cx="265" cy="55" rx="38" ry="5" fill="rgba(200,255,0,0.13)" stroke="#c8ff00" stroke-width="0.8"/>
+            </g>
+            <g class="rotor-spin" style="transform-box:fill-box;transform-origin:55px 205px">
+              <ellipse cx="55" cy="205" rx="38" ry="5" fill="rgba(0,212,255,0.1)" stroke="#00d4ff" stroke-width="0.8"/>
+            </g>
+            <g class="rotor-spin2" style="transform-box:fill-box;transform-origin:265px 205px">
+              <ellipse cx="265" cy="205" rx="38" ry="5" fill="rgba(0,212,255,0.1)" stroke="#00d4ff" stroke-width="0.8"/>
+            </g>
+
+            <!-- Main body - central hub -->
+            <rect x="126" y="96" width="68" height="68" rx="8" fill="#1c1f28" stroke="#2e3240" stroke-width="1.5"/>
+            <rect x="132" y="102" width="56" height="56" rx="6" fill="#13151c"/>
+            <!-- Body face detail -->
+            <rect x="138" y="108" width="44" height="10" rx="2" fill="#1c1f28" stroke="#c8ff00" stroke-width="0.5" opacity="0.7"/>
+            <rect x="142" y="112" width="6" height="2" rx="1" fill="#c8ff00" opacity="0.9"/>
+            <rect x="151" y="112" width="4" height="2" rx="1" fill="#c8ff00" opacity="0.5"/>
+
+            <!-- Delivery pod / cargo box hanging below -->
+            <line x1="148" y1="164" x2="142" y2="180" stroke="#2e3240" stroke-width="2"/>
+            <line x1="172" y1="164" x2="178" y2="180" stroke="#2e3240" stroke-width="2"/>
+            <!-- Cargo sling -->
+            <line x1="142" y1="180" x2="142" y2="186" stroke="#c8ff00" stroke-width="1" stroke-dasharray="2 2" opacity="0.5"/>
+            <line x1="178" y1="180" x2="178" y2="186" stroke="#c8ff00" stroke-width="1" stroke-dasharray="2 2" opacity="0.5"/>
+            <!-- Cargo box body -->
+            <rect x="132" y="186" width="56" height="34" rx="4" fill="#1c1f28" stroke="#c8ff00" stroke-width="1"/>
+            <!-- Box face shading (3D effect) -->
+            <rect x="132" y="186" width="56" height="9" rx="4" fill="#252830"/>
+            <rect x="132" y="186" width="56" height="4" rx="4" fill="#2e3240"/>
+            <!-- Box labels -->
+            <rect x="139" y="198" width="16" height="3" rx="1" fill="rgba(200,255,0,0.4)"/>
+            <rect x="139" y="203" width="26" height="2" rx="1" fill="rgba(200,255,0,0.2)"/>
+            <rect x="139" y="207" width="20" height="2" rx="1" fill="rgba(200,255,0,0.15)"/>
+            <!-- Box lock icon -->
+            <rect x="166" y="198" width="14" height="12" rx="2" stroke="rgba(0,212,255,0.5)" stroke-width="1" fill="none"/>
+            <path d="M169 198 Q173 192 177 198" stroke="rgba(0,212,255,0.5)" stroke-width="1" fill="none"/>
+            <circle cx="173" cy="204" r="2" fill="rgba(0,212,255,0.5)"/>
+
+            <!-- Status LEDs on body -->
+            <circle cx="135" cy="107" r="2.5" fill="#c8ff00" opacity="0.9"/>
+            <circle cx="185" cy="107" r="2.5" fill="#00d4ff" opacity="0.7"/>
+
+            <!-- GPS antenna on top -->
+            <rect x="157" y="92" width="6" height="8" rx="1" fill="#2e3240"/>
+            <circle cx="160" cy="90" r="4" fill="#1c1f28" stroke="#c8ff00" stroke-width="0.8"/>
+            <circle cx="160" cy="90" r="1.5" fill="#c8ff00"/>
+
+            <!-- Flight path dots -->
+            <circle cx="80" cy="30" r="1.5" fill="#c8ff00" opacity="0.3"/>
+            <circle cx="100" cy="25" r="1.5" fill="#c8ff00" opacity="0.4"/>
+            <circle cx="120" cy="22" r="1.5" fill="#c8ff00" opacity="0.5"/>
+            <circle cx="140" cy="20" r="1.5" fill="#c8ff00" opacity="0.6"/>
+          </svg>
+        </div>
+      </div>
+      <div class="drone-label-bar">
+        <h3>VX-D1 Delivery Drone</h3>
+        <p>Last-mile autonomous delivery with secure cargo lock and real-time GPS tracking. Handles up to 5kg payloads across 12km routes.</p>
+        <div class="drone-meta">
+          <div class="drone-meta-item">
+            <span class="drone-meta-val">12<small style="font-size:0.6rem;font-family:monospace"> km</small></span>
+            <span class="drone-meta-lbl">Range</span>
+          </div>
+          <div class="drone-meta-item">
+            <span class="drone-meta-val">5<small style="font-size:0.6rem;font-family:monospace"> kg</small></span>
+            <span class="drone-meta-lbl">Payload</span>
+          </div>
+          <div class="drone-meta-item">
+            <span class="drone-meta-val">65<small style="font-size:0.6rem;font-family:monospace"> min</small></span>
+            <span class="drone-meta-lbl">Endurance</span>
+          </div>
+          <div class="drone-meta-item">
+            <span class="drone-meta-val">RTK</span>
+            <span class="drone-meta-lbl">Navigation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECURITY / SURVEILLANCE DRONE -->
+    <div class="drone-card">
+      <div class="drone-viewport">
+        <div class="drone-glow" style="background:radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%)"></div>
+        <div class="scanline"></div>
+        <span class="drone-type-badge" style="color:#00d4ff;border-color:rgba(0,212,255,0.3)">VX-S2 · Security</span>
+        <div class="drone-svg-wrap float-anim-slow">
+          <svg viewBox="0 0 320 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Shadow -->
+            <ellipse cx="160" cy="272" rx="50" ry="5" fill="rgba(0,212,255,0.07)"/>
+
+            <!-- Hexagonal frame - 6 rotors -->
+            <!-- Arms from center to motor positions -->
+            <line x1="160" y1="120" x2="160" y2="32"  stroke="#2a2d38" stroke-width="5" stroke-linecap="round"/>
+            <line x1="160" y1="120" x2="240" y2="68"  stroke="#2a2d38" stroke-width="5" stroke-linecap="round"/>
+            <line x1="160" y1="120" x2="240" y2="172" stroke="#2a2d38" stroke-width="5" stroke-linecap="round"/>
+            <line x1="160" y1="120" x2="160" y2="208" stroke="#2a2d38" stroke-width="5" stroke-linecap="round"/>
+            <line x1="160" y1="120" x2="80"  y2="172" stroke="#2a2d38" stroke-width="5" stroke-linecap="round"/>
+            <line x1="160" y1="120" x2="80"  y2="68"  stroke="#2a2d38" stroke-width="5" stroke-linecap="round"/>
+
+            <!-- Arm highlights -->
+            <line x1="160" y1="120" x2="160" y2="32"  stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
+            <line x1="160" y1="120" x2="240" y2="68"  stroke="rgba(0,212,255,0.2)" stroke-width="1"/>
+            <line x1="160" y1="120" x2="240" y2="172" stroke="rgba(0,212,255,0.2)" stroke-width="1"/>
+            <line x1="160" y1="120" x2="160" y2="208" stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
+            <line x1="160" y1="120" x2="80"  y2="172" stroke="rgba(0,212,255,0.2)" stroke-width="1"/>
+            <line x1="160" y1="120" x2="80"  y2="68"  stroke="rgba(0,212,255,0.2)" stroke-width="1"/>
+
+            <!-- Hex frame ring (structural) -->
+            <polygon points="160,32 240,68 240,172 160,208 80,172 80,68" stroke="rgba(0,212,255,0.12)" stroke-width="1" fill="none"/>
+
+            <!-- Motor nacelles x6 -->
+            <circle cx="160" cy="32"  r="18" fill="#181b24" stroke="#252a36" stroke-width="1.5"/>
+            <circle cx="240" cy="68"  r="18" fill="#181b24" stroke="#252a36" stroke-width="1.5"/>
+            <circle cx="240" cy="172" r="18" fill="#181b24" stroke="#252a36" stroke-width="1.5"/>
+            <circle cx="160" cy="208" r="18" fill="#181b24" stroke="#252a36" stroke-width="1.5"/>
+            <circle cx="80"  cy="172" r="18" fill="#181b24" stroke="#252a36" stroke-width="1.5"/>
+            <circle cx="80"  cy="68"  r="18" fill="#181b24" stroke="#252a36" stroke-width="1.5"/>
+
+            <!-- Rotors x6 -->
+            <g class="rotor-spin"  style="transform-box:fill-box;transform-origin:160px 32px">
+              <ellipse cx="160" cy="32" rx="32" ry="4.5" fill="rgba(0,212,255,0.12)" stroke="#00d4ff" stroke-width="0.7"/>
+            </g>
+            <g class="rotor-spin2" style="transform-box:fill-box;transform-origin:240px 68px">
+              <ellipse cx="240" cy="68" rx="32" ry="4.5" fill="rgba(0,212,255,0.12)" stroke="#00d4ff" stroke-width="0.7"/>
+            </g>
+            <g class="rotor-spin"  style="transform-box:fill-box;transform-origin:240px 172px">
+              <ellipse cx="240" cy="172" rx="32" ry="4.5" fill="rgba(0,212,255,0.08)" stroke="#00d4ff" stroke-width="0.7"/>
+            </g>
+            <g class="rotor-spin2" style="transform-box:fill-box;transform-origin:160px 208px">
+              <ellipse cx="160" cy="208" rx="32" ry="4.5" fill="rgba(0,212,255,0.08)" stroke="#00d4ff" stroke-width="0.7"/>
+            </g>
+            <g class="rotor-spin"  style="transform-box:fill-box;transform-origin:80px 172px">
+              <ellipse cx="80" cy="172" rx="32" ry="4.5" fill="rgba(0,212,255,0.08)" stroke="#00d4ff" stroke-width="0.7"/>
+            </g>
+            <g class="rotor-spin2" style="transform-box:fill-box;transform-origin:80px 68px">
+              <ellipse cx="80" cy="68" rx="32" ry="4.5" fill="rgba(0,212,255,0.12)" stroke="#00d4ff" stroke-width="0.7"/>
+            </g>
+
+            <!-- Central hub body - angular/armored -->
+            <polygon points="160,86 188,103 188,137 160,154 132,137 132,103" fill="#181b24" stroke="#252a36" stroke-width="2"/>
+            <polygon points="160,91 183,106 183,134 160,149 137,134 137,106" fill="#11141c" stroke="rgba(0,212,255,0.2)" stroke-width="0.5"/>
+
+            <!-- Body face panels -->
+            <polygon points="160,91 183,106 160,120 137,106" fill="#1c1f2a" stroke="rgba(0,212,255,0.1)" stroke-width="0.5"/>
+            <polygon points="160,120 183,106 183,134 160,149" fill="#171a23" stroke="rgba(0,212,255,0.05)" stroke-width="0.5"/>
+            <polygon points="160,120 137,106 137,134 160,149" fill="#14171f" stroke="rgba(0,212,255,0.05)" stroke-width="0.5"/>
+
+            <!-- Rotating thermal/surveillance camera turret -->
+            <circle cx="160" cy="120" r="16" fill="#0e1018" stroke="rgba(0,212,255,0.4)" stroke-width="1"/>
+            <circle cx="160" cy="120" r="10" fill="#0a0c14" stroke="rgba(0,212,255,0.3)" stroke-width="0.8"/>
+            <!-- Camera lens -->
+            <circle cx="160" cy="120" r="6"  fill="#050609" stroke="#00d4ff" stroke-width="1"/>
+            <circle cx="160" cy="120" r="3"  fill="#00d4ff" opacity="0.5"/>
+            <circle cx="158" cy="118" r="1.2" fill="rgba(255,255,255,0.6)"/>
+
+            <!-- Thermal halo rings -->
+            <circle cx="160" cy="120" r="20" stroke="rgba(0,212,255,0.12)" stroke-width="1" stroke-dasharray="3 4"/>
+            <circle cx="160" cy="120" r="26" stroke="rgba(0,212,255,0.07)" stroke-width="1" stroke-dasharray="3 6"/>
+
+            <!-- Status LED array -->
+            <circle cx="140" cy="98"  r="2" fill="#00d4ff" opacity="0.8"/>
+            <circle cx="147" cy="94"  r="1.5" fill="#c8ff00" opacity="0.6"/>
+            <circle cx="180" cy="98"  r="2" fill="#00d4ff" opacity="0.6"/>
+
+            <!-- Spotlight beam below camera -->
+            <polygon points="155,136 165,136 170,165 150,165" fill="rgba(0,212,255,0.05)" stroke="none"/>
+            <line x1="155" y1="136" x2="150" y2="165" stroke="rgba(0,212,255,0.2)" stroke-width="0.5"/>
+            <line x1="165" y1="136" x2="170" y2="165" stroke="rgba(0,212,255,0.2)" stroke-width="0.5"/>
+            <ellipse cx="160" cy="165" rx="10" ry="2.5" fill="rgba(0,212,255,0.08)" stroke="#00d4ff" stroke-width="0.5" opacity="0.5"/>
+
+            <!-- Radar sweep arc -->
+            <path d="M160 120 L178 102" stroke="rgba(0,212,255,0.5)" stroke-width="0.8"/>
+            <path d="M145 105 A 20 20 0 0 1 175 105" stroke="rgba(0,212,255,0.25)" stroke-width="0.8" fill="none" stroke-dasharray="2 3"/>
+          </svg>
+        </div>
+      </div>
+      <div class="drone-label-bar">
+        <h3>VX-S2 Security Drone</h3>
+        <p>6-rotor surveillance platform with 360° thermal camera turret, night vision, and real-time encrypted video uplink for perimeter defence.</p>
+        <div class="drone-meta">
+          <div class="drone-meta-item">
+            <span class="drone-meta-val">360°</span>
+            <span class="drone-meta-lbl">Camera Pan</span>
+          </div>
+          <div class="drone-meta-item">
+            <span class="drone-meta-val">IR</span>
+            <span class="drone-meta-lbl">Thermal</span>
+          </div>
+          <div class="drone-meta-item">
+            <span class="drone-meta-val">8km</span>
+            <span class="drone-meta-lbl">Signal Range</span>
+          </div>
+          <div class="drone-meta-item">
+            <span class="drone-meta-val">4K</span>
+            <span class="drone-meta-lbl">Resolution</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AGRI / LIDAR FIXED-WING HYBRID -->
+    <div class="drone-card">
+      <div class="drone-viewport">
+        <div class="drone-glow" style="background:radial-gradient(circle, rgba(255,180,0,0.07) 0%, transparent 70%)"></div>
+        <div class="scanline"></div>
+        <span class="drone-type-badge" style="color:#ffa500;border-color:rgba(255,165,0,0.3)">VX-A3 · Agriculture</span>
+        <div class="drone-svg-wrap float-anim-fast">
+          <svg viewBox="0 0 320 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Shadow -->
+            <ellipse cx="160" cy="252" rx="60" ry="6" fill="rgba(255,165,0,0.07)"/>
+
+            <!-- FIXED WING BODY -->
+            <!-- Fuselage -->
+            <path d="M80 130 Q120 122 160 120 Q200 122 240 130 Q200 138 160 140 Q120 138 80 130Z" fill="#1c1f28" stroke="#2a2d38" stroke-width="1.5"/>
+            <!-- Nose cone -->
+            <ellipse cx="82" cy="130" rx="12" ry="10" fill="#13151c" stroke="#2a2d38" stroke-width="1"/>
+            <ellipse cx="238" cy="130" rx="12" ry="10" fill="#252830" stroke="#2a2d38" stroke-width="1"/>
+
+            <!-- Main wings -->
+            <path d="M160 125 L290 100 L290 104 L170 132 Z" fill="#1a1d26" stroke="rgba(255,165,0,0.25)" stroke-width="1"/>
+            <path d="M160 135 L290 156 L290 160 L170 138 Z" fill="#171a22" stroke="rgba(255,165,0,0.15)" stroke-width="1"/>
+            <path d="M160 125 L30 100 L30 104 L150 132 Z" fill="#1a1d26" stroke="rgba(255,165,0,0.25)" stroke-width="1"/>
+            <path d="M160 135 L30 156 L30 160 L150 138 Z" fill="#171a22" stroke="rgba(255,165,0,0.15)" stroke-width="1"/>
+
+            <!-- Wing ribs/detail lines -->
+            <line x1="200" y1="129" x2="260" y2="112" stroke="rgba(255,165,0,0.1)" stroke-width="0.8"/>
+            <line x1="230" y1="128" x2="285" y2="108" stroke="rgba(255,165,0,0.08)" stroke-width="0.8"/>
+            <line x1="120" y1="129" x2="60" y2="112" stroke="rgba(255,165,0,0.1)" stroke-width="0.8"/>
+            <line x1="90" y1="128" x2="35" y2="108" stroke="rgba(255,165,0,0.08)" stroke-width="0.8"/>
+
+            <!-- Tail V-structure -->
+            <path d="M230 130 L290 95"  stroke="#2a2d38" stroke-width="4" stroke-linecap="round"/>
+            <path d="M230 130 L290 165" stroke="#2a2d38" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="290" cy="95"  r="10" fill="#181b24" stroke="rgba(255,165,0,0.3)" stroke-width="1"/>
+            <circle cx="290" cy="165" r="10" fill="#181b24" stroke="rgba(255,165,0,0.3)" stroke-width="1"/>
+
+            <!-- Pusher propeller (rear left) -->
+            <g class="rotor-spin" style="transform-box:fill-box;transform-origin:82px 130px">
+              <ellipse cx="82" cy="130" rx="5" ry="22" fill="rgba(255,165,0,0.15)" stroke="rgba(255,165,0,0.6)" stroke-width="0.8"/>
+            </g>
+
+            <!-- Front tractor prop -->
+            <g class="rotor-spin2" style="transform-box:fill-box;transform-origin:238px 130px">
+              <ellipse cx="238" cy="130" rx="5" ry="24" fill="rgba(200,255,0,0.12)" stroke="#c8ff00" stroke-width="0.8"/>
+            </g>
+
+            <!-- LIDAR pod under belly -->
+            <rect x="145" y="140" width="30" height="18" rx="3" fill="#0e1018" stroke="rgba(255,165,0,0.4)" stroke-width="1"/>
+            <circle cx="160" cy="149" r="6" fill="#0a0c12" stroke="rgba(255,165,0,0.6)" stroke-width="0.8"/>
+            <circle cx="160" cy="149" r="3" fill="#ffa500" opacity="0.6"/>
+
+            <!-- LIDAR fan beams -->
+            <line x1="160" y1="158" x2="130" y2="200" stroke="rgba(255,165,0,0.3)" stroke-width="0.7"/>
+            <line x1="160" y1="158" x2="145" y2="204" stroke="rgba(255,165,0,0.4)" stroke-width="0.7"/>
+            <line x1="160" y1="158" x2="160" y2="206" stroke="rgba(255,165,0,0.5)" stroke-width="0.7"/>
+            <line x1="160" y1="158" x2="175" y2="204" stroke="rgba(255,165,0,0.4)" stroke-width="0.7"/>
+            <line x1="160" y1="158" x2="190" y2="200" stroke="rgba(255,165,0,0.3)" stroke-width="0.7"/>
+            <!-- Ground dots -->
+            <circle cx="130" cy="202" r="1.5" fill="#ffa500" opacity="0.6"/>
+            <circle cx="145" cy="206" r="1.5" fill="#ffa500" opacity="0.7"/>
+            <circle cx="160" cy="208" r="1.5" fill="#ffa500" opacity="0.9"/>
+            <circle cx="175" cy="206" r="1.5" fill="#ffa500" opacity="0.7"/>
+            <circle cx="190" cy="202" r="1.5" fill="#ffa500" opacity="0.6"/>
+
+            <!-- Multispectral camera bay -->
+            <rect x="148" y="118" width="24" height="10" rx="2" fill="#0e1018" stroke="rgba(200,255,0,0.3)" stroke-width="0.8"/>
+            <circle cx="155" cy="123" r="3" fill="#060709" stroke="#c8ff00" stroke-width="0.6"/>
+            <circle cx="165" cy="123" r="3" fill="#060709" stroke="#c8ff00" stroke-width="0.6"/>
+
+            <!-- GPS/antenna fin on top -->
+            <rect x="157" y="106" width="6" height="14" rx="1" fill="#252830"/>
+            <rect x="155" y="104" width="10" height="4" rx="1" fill="#1c1f28" stroke="rgba(255,165,0,0.3)" stroke-width="0.5"/>
+
+            <!-- Status lights on wings -->
+            <circle cx="260" cy="106" r="2.5" fill="#c8ff00" opacity="0.8"/>
+            <circle cx="60"  cy="106" r="2.5" fill="#ff4444" opacity="0.8"/>
+
+            <!-- Body stripe accent -->
+            <line x1="100" y1="128" x2="220" y2="128" stroke="rgba(255,165,0,0.2)" stroke-width="1"/>
+          </svg>
+        </div>
+      </div>
+      <div class="drone-label-bar">
+        <h3>VX-A3 AgriWing</h3>
+        <p>Fixed-wing hybrid for large-area LIDAR surveys and multispectral crop scanning. Covers 800+ acres per flight at 110 km/h cruise speed.</p>
+        <div class="drone-meta">
+          <div class="drone-meta-item">
+            <span class="drone-meta-val">800<small style="font-size:0.6rem;font-family:monospace"> ac</small></span>
+            <span class="drone-meta-lbl">Per Flight</span>
+          </div>
+          <div class="drone-meta-item">
+            <span class="drone-meta-val">3hr</span>
+            <span class="drone-meta-lbl">Endurance</span>
+          </div>
+          <div class="drone-meta-item">
+            <span class="drone-meta-val">LIDAR</span>
+            <span class="drone-meta-lbl">+ Multispectral</span>
+          </div>
+          <div class="drone-meta-item">
+            <span class="drone-meta-val">110</span>
+            <span class="drone-meta-lbl">km/h Cruise</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ SERVICES ═══ -->
+<section id="services" style="background:var(--ink);color:var(--paper);padding:7rem 3rem;">
+  <div class="services-header">
+    <div>
+      <div class="section-label">Core Offerings</div>
+      <div class="section-title">WHAT WE<br>DELIVER</div>
+    </div>
+    <p class="services-intro-p">From fully managed drone operations to cloud-hosted analytics, AltivionX wraps every capability into a zero-friction service model — you focus on decisions, we handle the air.</p>
+  </div>
+
+  <div class="services-grid">
+    <!-- DaaS -->
+    <div class="service-card">
+      <span class="service-num">01</span>
+      <svg class="service-icon" viewBox="0 0 44 44" fill="none">
+        <rect x="2" y="14" width="40" height="20" rx="3" stroke="#c8ff00" stroke-width="1.5"/>
+        <line x1="22" y1="2" x2="22" y2="14" stroke="#c8ff00" stroke-width="1.5"/>
+        <circle cx="22" cy="2" r="3" fill="#c8ff00"/>
+        <circle cx="8" cy="8" r="5" stroke="rgba(200,255,0,0.4)" stroke-width="1"/>
+        <circle cx="36" cy="8" r="5" stroke="rgba(200,255,0,0.4)" stroke-width="1"/>
+        <circle cx="8" cy="36" r="5" stroke="rgba(200,255,0,0.4)" stroke-width="1"/>
+        <circle cx="36" cy="36" r="5" stroke="rgba(200,255,0,0.4)" stroke-width="1"/>
+        <circle cx="22" cy="24" r="4" fill="#c8ff00"/>
+      </svg>
+      <h3>Drone as a Service</h3>
+      <p>Fully managed flight operations with certified pilots, insurance, and regulatory compliance included. Deploy within 48 hours — no asset purchase, no maintenance overhead.</p>
+      <ul class="service-features">
+        <li>Certified pilot crew + safety officers</li>
+        <li>DGCA-compliant operations across India</li>
+        <li>48-hour mission deployment guarantee</li>
+        <li>Full post-flight data handover</li>
+      </ul>
+      <span class="service-tag">DaaS</span>
+    </div>
+
+    <!-- SaaS -->
+    <div class="service-card">
+      <span class="service-num">02</span>
+      <svg class="service-icon" viewBox="0 0 44 44" fill="none">
+        <rect x="4" y="8" width="36" height="28" rx="3" stroke="#c8ff00" stroke-width="1.5"/>
+        <line x1="4" y1="16" x2="40" y2="16" stroke="#c8ff00" stroke-width="1" opacity="0.5"/>
+        <rect x="10" y="21" width="10" height="3" rx="1" fill="#c8ff00" opacity="0.6"/>
+        <rect x="10" y="27" width="16" height="3" rx="1" fill="#c8ff00" opacity="0.4"/>
+        <rect x="26" y="21" width="8" height="9" rx="1" stroke="#c8ff00" stroke-width="1" opacity="0.5"/>
+        <circle cx="8" cy="12" r="2" fill="#c8ff00"/>
+        <circle cx="14" cy="12" r="2" fill="rgba(200,255,0,0.4)"/>
+      </svg>
+      <h3>Software as a Service</h3>
+      <p>Upload raw flight data; receive photogrammetric 3D models, NDVI maps, LIDAR point clouds, and executive reports — all via browser, within hours of landing.</p>
+      <ul class="service-features">
+        <li>GIS-ready orthomosaic & DSM outputs</li>
+        <li>NDVI / NDRE / SAVI crop indices</li>
+        <li>Team collaboration & annotation tools</li>
+        <li>API access + ERP/FMS integration</li>
+      </ul>
+      <span class="service-tag">SaaS</span>
+    </div>
+
+    <!-- Agriculture -->
+    <div class="service-card">
+      <span class="service-num">03</span>
+      <svg class="service-icon" viewBox="0 0 44 44" fill="none">
+        <path d="M22 38 C22 38 8 28 8 18 C8 12 14 7 22 7 C30 7 36 12 36 18 C36 28 22 38 22 38Z" stroke="#c8ff00" stroke-width="1.5" fill="none"/>
+        <path d="M22 18 L22 35" stroke="rgba(200,255,0,0.4)" stroke-width="1" stroke-dasharray="2 2"/>
+        <path d="M22 18 C18 14 12 14 10 18" stroke="#c8ff00" stroke-width="1.5" fill="none"/>
+        <path d="M22 22 C26 18 32 18 34 22" stroke="#c8ff00" stroke-width="1.5" fill="none"/>
+      </svg>
+      <h3>Precision Agriculture</h3>
+      <p>Multispectral scanning, plant health analytics, irrigation gap detection, and yield forecasting — giving farm managers the spatial intelligence to act on the right acres at the right time.</p>
+      <ul class="service-features">
+        <li>Crop stress & pest hotspot mapping</li>
+        <li>Variable-rate prescription map export</li>
+        <li>Soil moisture & drainage analysis</li>
+        <li>Season-over-season trend dashboards</li>
+      </ul>
+      <span class="service-tag">Agriculture</span>
+    </div>
+
+    <!-- LIDAR -->
+    <div class="service-card">
+      <span class="service-num">04</span>
+      <svg class="service-icon" viewBox="0 0 44 44" fill="none">
+        <circle cx="22" cy="22" r="8" stroke="#c8ff00" stroke-width="1.5"/>
+        <circle cx="22" cy="22" r="14" stroke="rgba(200,255,0,0.3)" stroke-width="1" stroke-dasharray="3 3"/>
+        <circle cx="22" cy="22" r="20" stroke="rgba(200,255,0,0.15)" stroke-width="1" stroke-dasharray="3 5"/>
+        <circle cx="22" cy="22" r="3" fill="#c8ff00"/>
+        <line x1="22" y1="2" x2="22" y2="6" stroke="#c8ff00" stroke-width="1.5"/>
+        <line x1="38" y1="22" x2="42" y2="22" stroke="#c8ff00" stroke-width="1.5"/>
+        <line x1="6" y1="22" x2="2" y2="22" stroke="#c8ff00" stroke-width="1.5"/>
+        <line x1="22" y1="42" x2="22" y2="38" stroke="#c8ff00" stroke-width="1.5"/>
+      </svg>
+      <h3>LIDAR Surveying</h3>
+      <p>Dense point cloud generation at ±2 cm vertical accuracy across terrain, vegetation, and built structures — replacing weeks of ground survey with a single flight day.</p>
+      <ul class="service-features">
+        <li>240+ pts/m² pulse density</li>
+        <li>Bare-earth DTM & full DSM outputs</li>
+        <li>Volumetric stockpile measurement</li>
+        <li>Power-line corridor clearance analysis</li>
+      </ul>
+      <span class="service-tag">LIDAR</span>
+    </div>
+
+    <!-- Mapping -->
+    <div class="service-card">
+      <span class="service-num">05</span>
+      <svg class="service-icon" viewBox="0 0 44 44" fill="none">
+        <polygon points="22,4 40,14 40,34 22,40 4,34 4,14" stroke="#c8ff00" stroke-width="1.5" fill="none"/>
+        <line x1="4" y1="14" x2="40" y2="14" stroke="rgba(200,255,0,0.3)" stroke-width="1"/>
+        <line x1="4" y1="24" x2="40" y2="24" stroke="rgba(200,255,0,0.3)" stroke-width="1"/>
+        <line x1="13" y1="4" x2="13" y2="40" stroke="rgba(200,255,0,0.2)" stroke-width="1"/>
+        <line x1="31" y1="4" x2="31" y2="40" stroke="rgba(200,255,0,0.2)" stroke-width="1"/>
+        <circle cx="22" cy="22" r="3" fill="#c8ff00"/>
+      </svg>
+      <h3>3D Aerial Mapping</h3>
+      <p>Photogrammetric 3D reconstruction of terrain, infrastructure, and urban environments at sub-5 cm ground sampling distance. Deliverables include ortho-photos, DEMs, and textured mesh models.</p>
+      <ul class="service-features">
+        <li>&lt;3 cm ground sampling distance (GSD)</li>
+        <li>Georeferenced orthomosaic TIFFs</li>
+        <li>3D mesh export (OBJ / LAS / DXF)</li>
+        <li>Change detection between surveys</li>
+      </ul>
+      <span class="service-tag">Mapping</span>
+    </div>
+
+    <!-- Surveillance -->
+    <div class="service-card">
+      <span class="service-num">06</span>
+      <svg class="service-icon" viewBox="0 0 44 44" fill="none">
+        <circle cx="22" cy="18" r="10" stroke="#c8ff00" stroke-width="1.5"/>
+        <circle cx="22" cy="18" r="4" fill="#c8ff00" opacity="0.7"/>
+        <path d="M14 32 L8 42" stroke="rgba(200,255,0,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M30 32 L36 42" stroke="rgba(200,255,0,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+        <rect x="6" y="40" width="32" height="2" rx="1" fill="rgba(200,255,0,0.3)"/>
+        <path d="M12 22 L6 30 L38 30 L32 22" stroke="#c8ff00" stroke-width="1" fill="none"/>
+      </svg>
+      <h3>Surveillance & Security</h3>
+      <p>Autonomous perimeter monitoring with thermal + 4K dual-sensor payloads, encrypted live video uplink, and AI-driven intrusion detection — available as 24/7 managed service.</p>
+      <ul class="service-features">
+        <li>Thermal + optical dual-sensor fusion</li>
+        <li>AI object & perimeter-breach alerts</li>
+        <li>AES-256 encrypted video stream</li>
+        <li>24/7 NOC monitoring option</li>
+      </ul>
+      <span class="service-tag">Security</span>
+    </div>
+  </div>
+
+  <!-- Pricing tiers teaser -->
+  <div class="services-pricing-strip">
+    <div class="pricing-item">
+      <span class="pricing-tier">Starter</span>
+      <span class="pricing-desc">Single-mission DaaS deployment · Results in 24h</span>
+      <a href="#contact" class="pricing-cta">Enquire →</a>
+    </div>
+    <div class="pricing-divider"></div>
+    <div class="pricing-item">
+      <span class="pricing-tier">Scale</span>
+      <span class="pricing-desc">Monthly SaaS subscription · Unlimited data uploads</span>
+      <a href="#contact" class="pricing-cta">Enquire →</a>
+    </div>
+    <div class="pricing-divider"></div>
+    <div class="pricing-item">
+      <span class="pricing-tier">Enterprise</span>
+      <span class="pricing-desc">Dedicated fleet + custom analytics pipeline · SLA-backed</span>
+      <a href="#contact" class="pricing-cta">Enquire →</a>
+    </div>
+  </div>
+</section>
+
+<!-- TECHNOLOGY -->
+<section id="about" style="display:block;padding:6rem 3rem;background:var(--paper);">
+  <div class="section-label">Technology Stack</div>
+  <div class="section-title" style="margin-bottom:3.5rem;">MISSION-TO-<br>INSIGHT IN<br>HOURS</div>
+
+  <!-- Pipeline flow -->
+  <div class="tech-pipeline">
+    <div class="tech-pipe-step" data-step="01">
+      <div class="tech-pipe-icon">
+        <svg viewBox="0 0 48 48" fill="none" width="36" height="36">
+          <rect x="4" y="4" width="40" height="40" rx="4" stroke="#c8ff00" stroke-width="1.5"/>
+          <path d="M14 24 L20 30 L34 18" stroke="#c8ff00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="10" y="10" width="10" height="6" rx="1" fill="rgba(200,255,0,0.15)"/>
+          <rect x="28" y="10" width="10" height="6" rx="1" fill="rgba(200,255,0,0.1)"/>
+        </svg>
+      </div>
+      <div class="tech-pipe-label">Mission<br>Planning</div>
+      <p class="tech-pipe-desc">AI-generated flight path, sensor config, regulatory airspace check — all in under 5 min via browser or API.</p>
+    </div>
+    <div class="tech-pipe-arrow">→</div>
+    <div class="tech-pipe-step" data-step="02">
+      <div class="tech-pipe-icon">
+        <svg viewBox="0 0 48 48" fill="none" width="36" height="36">
+          <circle cx="24" cy="24" r="8" stroke="#c8ff00" stroke-width="1.5"/>
+          <circle cx="8" cy="14" r="5" stroke="rgba(200,255,0,0.5)" stroke-width="1"/>
+          <circle cx="40" cy="14" r="5" stroke="rgba(200,255,0,0.5)" stroke-width="1"/>
+          <circle cx="8" cy="34" r="5" stroke="rgba(200,255,0,0.35)" stroke-width="1"/>
+          <circle cx="40" cy="34" r="5" stroke="rgba(200,255,0,0.35)" stroke-width="1"/>
+          <line x1="13" y1="14" x2="16" y2="18" stroke="rgba(200,255,0,0.4)" stroke-width="1"/>
+          <line x1="35" y1="14" x2="32" y2="18" stroke="rgba(200,255,0,0.4)" stroke-width="1"/>
+          <circle cx="24" cy="24" r="3" fill="#c8ff00"/>
+        </svg>
+      </div>
+      <div class="tech-pipe-label">Autonomous<br>Flight</div>
+      <p class="tech-pipe-desc">VX-series drone executes autonomously — simultaneous LIDAR, multispectral, RGB, and thermal collection in one pass.</p>
+    </div>
+    <div class="tech-pipe-arrow">→</div>
+    <div class="tech-pipe-step" data-step="03">
+      <div class="tech-pipe-icon">
+        <svg viewBox="0 0 48 48" fill="none" width="36" height="36">
+          <path d="M8 36 L16 28 L22 34 L30 20 L38 26" stroke="#c8ff00" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="4" y="4" width="40" height="40" rx="3" stroke="rgba(200,255,0,0.3)" stroke-width="1"/>
+          <circle cx="16" cy="28" r="2.5" fill="#c8ff00"/>
+          <circle cx="22" cy="34" r="2.5" fill="#c8ff00" opacity="0.7"/>
+          <circle cx="30" cy="20" r="2.5" fill="#c8ff00"/>
+        </svg>
+      </div>
+      <div class="tech-pipe-label">Edge &amp; Cloud<br>Processing</div>
+      <p class="tech-pipe-desc">Onboard edge compute pre-processes raw streams; cloud pipeline runs photogrammetry, LIDAR classification, and index generation in parallel.</p>
+    </div>
+    <div class="tech-pipe-arrow">→</div>
+    <div class="tech-pipe-step" data-step="04">
+      <div class="tech-pipe-icon">
+        <svg viewBox="0 0 48 48" fill="none" width="36" height="36">
+          <rect x="4" y="8" width="40" height="30" rx="3" stroke="#c8ff00" stroke-width="1.5"/>
+          <rect x="10" y="14" width="12" height="12" rx="1" fill="rgba(200,255,0,0.12)" stroke="#c8ff00" stroke-width="0.8"/>
+          <rect x="26" y="14" width="12" height="5" rx="1" fill="rgba(200,255,0,0.08)" stroke="rgba(200,255,0,0.4)" stroke-width="0.8"/>
+          <rect x="26" y="21" width="12" height="5" rx="1" fill="rgba(200,255,0,0.06)" stroke="rgba(200,255,0,0.3)" stroke-width="0.8"/>
+          <line x1="4" y1="40" x2="44" y2="40" stroke="rgba(200,255,0,0.2)" stroke-width="0.8"/>
+          <rect x="18" y="40" width="12" height="4" rx="1" fill="rgba(200,255,0,0.2)"/>
+        </svg>
+      </div>
+      <div class="tech-pipe-label">Dashboard<br>Delivery</div>
+      <p class="tech-pipe-desc">Orthomosaics, 3D models, NDVI maps, reports, and raw data appear in your dashboard — downloadable and API-accessible within hours of landing.</p>
+    </div>
+  </div>
+
+  <!-- Tech pillars grid -->
+  <div class="tech-pillars">
+    <div class="tech-pillar">
+      <div class="tech-pillar-head">
+        <span class="tech-pillar-num">A</span>
+        <span class="tech-pillar-title">AI-Driven Navigation</span>
+      </div>
+      <p>Onboard neural networks handle obstacle avoidance, terrain following, and real-time re-routing when airspace or weather conditions change mid-flight.</p>
+      <div class="tech-tags"><span>RTK + PPK</span><span>Terrain Follow</span><span>Geofencing</span></div>
+    </div>
+    <div class="tech-pillar">
+      <div class="tech-pillar-head">
+        <span class="tech-pillar-num">B</span>
+        <span class="tech-pillar-title">Multi-Sensor Fusion</span>
+      </div>
+      <p>Simultaneous LIDAR, RGB, multispectral (5-band), and thermal payloads are time-synced to GPS so every data type is co-registered at the pixel level.</p>
+      <div class="tech-tags"><span>LIDAR</span><span>5-Band MS</span><span>FLIR Thermal</span></div>
+    </div>
+    <div class="tech-pillar">
+      <div class="tech-pillar-head">
+        <span class="tech-pillar-num">C</span>
+        <span class="tech-pillar-title">Cloud Processing Engine</span>
+      </div>
+      <p>Photogrammetric pipelines built on Metashape and custom ML models generate point clouds, orthomosaics, and crop health indices automatically after every flight.</p>
+      <div class="tech-tags"><span>Photogrammetry</span><span>ML Inference</span><span>GIS Export</span></div>
+    </div>
+    <div class="tech-pillar">
+      <div class="tech-pillar-head">
+        <span class="tech-pillar-num">D</span>
+        <span class="tech-pillar-title">Open API &amp; Integrations</span>
+      </div>
+      <p>REST API with webhook support lets you pull processed outputs directly into your farm management, ERP, or GIS platform. SDKs available for Python and JavaScript.</p>
+      <div class="tech-tags"><span>REST API</span><span>Webhooks</span><span>QGIS / ArcGIS</span></div>
+    </div>
+  </div>
+
+  <!-- SaaS platform visual -->
+  <div class="tech-platform-strip">
+    <div class="tech-platform-left">
+      <div class="section-label" style="margin-bottom:0.75rem;">SaaS Platform Preview</div>
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.04em;margin-bottom:0.75rem;line-height:1.1;">AltivionXVIEW<br>DASHBOARD</h3>
+      <p style="font-size:0.875rem;color:var(--muted);line-height:1.7;max-width:320px;">Web-based mission control, live telemetry, data library, and analytics — accessible from any browser. No software installation required.</p>
+      <div style="margin-top:1.25rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
+        <span style="font-family:'Space Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;background:var(--ink);color:var(--accent);padding:0.3rem 0.7rem;">Web App</span>
+        <span style="font-family:'Space Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;border:1px solid var(--border);padding:0.3rem 0.7rem;">iOS &amp; Android</span>
+        <span style="font-family:'Space Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;border:1px solid var(--border);padding:0.3rem 0.7rem;">REST API</span>
+      </div>
+    </div>
+    <div class="tech-platform-right">
+      <!-- Fake dashboard UI SVG -->
+      <svg viewBox="0 0 420 260" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;border:1px solid var(--border)">
+        <!-- Window chrome -->
+        <rect width="420" height="260" fill="#0d0f16"/>
+        <rect width="420" height="32" fill="#111420"/>
+        <circle cx="14" cy="16" r="5" fill="#ff5f57" opacity="0.7"/>
+        <circle cx="28" cy="16" r="5" fill="#febc2e" opacity="0.7"/>
+        <circle cx="42" cy="16" r="5" fill="#28c840" opacity="0.7"/>
+        <rect x="60" y="10" width="160" height="12" rx="6" fill="rgba(200,255,0,0.06)" stroke="rgba(200,255,0,0.15)" stroke-width="0.5"/>
+        <text x="68" y="20" fill="rgba(200,255,0,0.4)" font-size="6" font-family="monospace">AltivionXview.app/dashboard</text>
+        <!-- Sidebar -->
+        <rect x="0" y="32" width="52" height="228" fill="#0a0c12"/>
+        <rect x="10" y="44" width="32" height="3" rx="1" fill="rgba(200,255,0,0.3)"/>
+        <rect x="10" y="55" width="24" height="3" rx="1" fill="rgba(200,255,0,0.1)"/>
+        <rect x="10" y="68" width="28" height="3" rx="1" fill="rgba(200,255,0,0.1)"/>
+        <rect x="10" y="81" width="20" height="3" rx="1" fill="rgba(200,255,0,0.1)"/>
+        <rect x="10" y="94" width="26" height="3" rx="1" fill="rgba(200,255,0,0.1)"/>
+        <!-- Main area -->
+        <!-- Map tile area -->
+        <rect x="58" y="40" width="220" height="140" rx="2" fill="#0f1420"/>
+        <!-- Topo lines on map -->
+        <ellipse cx="168" cy="110" rx="80" ry="55" stroke="rgba(200,255,0,0.08)" stroke-width="1"/>
+        <ellipse cx="168" cy="110" rx="55" ry="38" stroke="rgba(200,255,0,0.1)" stroke-width="1"/>
+        <ellipse cx="168" cy="110" rx="30" ry="20" stroke="rgba(200,255,0,0.13)" stroke-width="1"/>
+        <!-- LIDAR dots scatter -->
+        <circle cx="130" cy="120" r="1.5" fill="#c8ff00" opacity="0.5"/>
+        <circle cx="145" cy="115" r="1.5" fill="#c8ff00" opacity="0.7"/>
+        <circle cx="160" cy="122" r="1.5" fill="#c8ff00" opacity="0.6"/>
+        <circle cx="175" cy="110" r="1.5" fill="#c8ff00" opacity="0.8"/>
+        <circle cx="190" cy="118" r="1.5" fill="#c8ff00" opacity="0.5"/>
+        <circle cx="205" cy="112" r="1.5" fill="#00d4ff" opacity="0.5"/>
+        <circle cx="150" cy="100" r="1.5" fill="#00d4ff" opacity="0.6"/>
+        <!-- Flight path line -->
+        <polyline points="90,90 110,100 135,88 158,95 180,88 200,98 220,85 248,92" stroke="#c8ff00" stroke-width="0.8" stroke-dasharray="3 3" opacity="0.4"/>
+        <!-- Drone pos -->
+        <circle cx="248" cy="92" r="4" fill="none" stroke="#c8ff00" stroke-width="1"/>
+        <circle cx="248" cy="92" r="2" fill="#c8ff00"/>
+        <!-- Map label -->
+        <text x="64" y="52" fill="rgba(200,255,0,0.35)" font-size="5.5" font-family="monospace">FIELD SURVEY — ANDHRA PRADESH · LIVE</text>
+        <!-- Stats strip -->
+        <rect x="58" y="185" width="220" height="80" rx="2" fill="#0a0c12"/>
+        <!-- Charts -->
+        <rect x="68" y="198" width="6" height="40" rx="1" fill="rgba(200,255,0,0.2)"/>
+        <rect x="76" y="205" width="6" height="33" rx="1" fill="rgba(200,255,0,0.3)"/>
+        <rect x="84" y="196" width="6" height="42" rx="1" fill="rgba(200,255,0,0.5)"/>
+        <rect x="92" y="202" width="6" height="36" rx="1" fill="rgba(200,255,0,0.4)"/>
+        <rect x="100" y="210" width="6" height="28" rx="1" fill="rgba(200,255,0,0.25)"/>
+        <rect x="108" y="200" width="6" height="38" rx="1" fill="rgba(200,255,0,0.35)"/>
+        <text x="68" y="248" fill="rgba(200,255,0,0.3)" font-size="5" font-family="monospace">NDVI INDEX — 6 ZONES</text>
+        <!-- Right panel -->
+        <rect x="286" y="40" width="126" height="225" rx="2" fill="#0a0c12"/>
+        <text x="294" y="56" fill="rgba(200,255,0,0.5)" font-size="5.5" font-family="monospace">MISSION STATUS</text>
+        <rect x="294" y="62" width="60" height="2" rx="1" fill="rgba(200,255,0,0.15)"/>
+        <!-- Status items -->
+        <circle cx="300" cy="76" r="3" fill="#c8ff00" opacity="0.8"/>
+        <text x="308" y="79" fill="rgba(245,242,236,0.7)" font-size="6" font-family="monospace">Flight Active</text>
+        <text x="294" y="92" fill="rgba(200,255,0,0.6)" font-size="8" font-family="'Bebas Neue',sans-serif">ALT 120m</text>
+        <text x="294" y="104" fill="rgba(200,255,0,0.6)" font-size="8" font-family="'Bebas Neue',sans-serif">87% BAT</text>
+        <text x="294" y="116" fill="rgba(200,255,0,0.6)" font-size="8" font-family="'Bebas Neue',sans-serif">34 MIN LEFT</text>
+        <rect x="294" y="122" width="110" height="0.5" fill="rgba(200,255,0,0.1)"/>
+        <text x="294" y="136" fill="rgba(245,242,236,0.4)" font-size="5.5" font-family="monospace">RECENT OUTPUTS</text>
+        <rect x="294" y="142" width="110" height="14" rx="1" fill="rgba(200,255,0,0.05)" stroke="rgba(200,255,0,0.15)" stroke-width="0.5"/>
+        <text x="300" y="152" fill="rgba(200,255,0,0.6)" font-size="5.5" font-family="monospace">orthomosaic_apr26.tif</text>
+        <rect x="294" y="160" width="110" height="14" rx="1" fill="rgba(200,255,0,0.05)" stroke="rgba(200,255,0,0.15)" stroke-width="0.5"/>
+        <text x="300" y="170" fill="rgba(200,255,0,0.6)" font-size="5.5" font-family="monospace">ndvi_field_zone3.tif</text>
+        <rect x="294" y="178" width="110" height="14" rx="1" fill="rgba(200,255,0,0.05)" stroke="rgba(200,255,0,0.15)" stroke-width="0.5"/>
+        <text x="300" y="188" fill="rgba(200,255,0,0.6)" font-size="5.5" font-family="monospace">lidar_cloud_raw.las</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- SPECS -->
+<section id="specs">
+  <div class="specs-top">
+    <div>
+      <div class="section-label">Technical Specifications</div>
+      <div class="section-title">ENGINEERING<br>THAT PERFORMS</div>
+    </div>
+    <div class="specs-model-tabs">
+      <button class="spec-tab active" onclick="switchSpecTab('vxd1',this)">VX-D1 Delivery</button>
+      <button class="spec-tab" onclick="switchSpecTab('vxs2',this)">VX-S2 Security</button>
+      <button class="spec-tab" onclick="switchSpecTab('vxa3',this)">VX-A3 AgriWing</button>
+    </div>
+  </div>
+
+  <!-- VX-D1 -->
+  <div class="spec-model-panel active" id="spec-vxd1">
+    <div class="specs-grid">
+      <div class="spec-card"><div class="spec-val">65<span class="spec-unit">MIN</span></div><div class="spec-lbl">Flight Endurance</div><div class="spec-bar"><div class="spec-fill" style="width:70%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">12<span class="spec-unit">KM</span></div><div class="spec-lbl">Delivery Range</div><div class="spec-bar"><div class="spec-fill" style="width:65%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">5<span class="spec-unit">KG</span></div><div class="spec-lbl">Max Payload</div><div class="spec-bar"><div class="spec-fill" style="width:55%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">RTK</div><div class="spec-lbl">GPS Accuracy ±2cm</div><div class="spec-bar"><div class="spec-fill" style="width:95%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">IP54</div><div class="spec-lbl">Weather Rating</div><div class="spec-bar"><div class="spec-fill" style="width:55%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">72<span class="spec-unit">km/h</span></div><div class="spec-lbl">Max Speed</div><div class="spec-bar"><div class="spec-fill" style="width:60%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">4<span class="spec-unit">Arm</span></div><div class="spec-lbl">Quadrotor Config</div><div class="spec-bar"><div class="spec-fill" style="width:50%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">AES</div><div class="spec-lbl">256-bit Encrypted Link</div><div class="spec-bar"><div class="spec-fill" style="width:95%"></div></div></div>
+    </div>
+    <div class="spec-extra-row">
+      <div class="spec-extra-item"><span class="spec-extra-lbl">Frame</span><span class="spec-extra-val">Carbon Fibre + Magnesium Alloy · 4.2 kg dry</span></div>
+      <div class="spec-extra-item"><span class="spec-extra-lbl">Battery</span><span class="spec-extra-val">6S 10,000 mAh LiPo · Smart BMS · Hot-swap</span></div>
+      <div class="spec-extra-item"><span class="spec-extra-lbl">Cargo</span><span class="spec-extra-val">Enclosed secure bay · Biometric release · Tamper alert</span></div>
+      <div class="spec-extra-item"><span class="spec-extra-lbl">Comms</span><span class="spec-extra-val">Dual-band 4G/LTE + 900 MHz RF fallback</span></div>
+    </div>
+  </div>
+
+  <!-- VX-S2 -->
+  <div class="spec-model-panel" id="spec-vxs2" style="display:none">
+    <div class="specs-grid">
+      <div class="spec-card"><div class="spec-val">90<span class="spec-unit">MIN</span></div><div class="spec-lbl">Flight Endurance</div><div class="spec-bar"><div class="spec-fill" style="width:85%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">360°</div><div class="spec-lbl">Camera Pan / Thermal</div><div class="spec-bar"><div class="spec-fill" style="width:100%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">4K</div><div class="spec-lbl">Optical + IR Dual Sensor</div><div class="spec-bar"><div class="spec-fill" style="width:90%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">8<span class="spec-unit">KM</span></div><div class="spec-lbl">Encrypted Video Range</div><div class="spec-bar"><div class="spec-fill" style="width:80%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">IP55</div><div class="spec-lbl">All-weather Rating</div><div class="spec-bar"><div class="spec-fill" style="width:60%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">6</div><div class="spec-lbl">Rotor Hexacopter</div><div class="spec-bar"><div class="spec-fill" style="width:70%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">AI</div><div class="spec-lbl">Object Detection Onboard</div><div class="spec-bar"><div class="spec-fill" style="width:88%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">30×</div><div class="spec-lbl">Optical Zoom</div><div class="spec-bar"><div class="spec-fill" style="width:75%"></div></div></div>
+    </div>
+    <div class="spec-extra-row">
+      <div class="spec-extra-item"><span class="spec-extra-lbl">Camera</span><span class="spec-extra-val">Sony 4K + FLIR Tau 2 · 360° gimbal · 10× digital zoom</span></div>
+      <div class="spec-extra-item"><span class="spec-extra-lbl">AI</span><span class="spec-extra-val">NVIDIA Jetson onboard · Person/vehicle/perimeter classification</span></div>
+      <div class="spec-extra-item"><span class="spec-extra-lbl">Uplink</span><span class="spec-extra-val">H.265 AES-256 encrypted stream · 30 fps live to NOC</span></div>
+      <div class="spec-extra-item"><span class="spec-extra-lbl">Redundancy</span><span class="spec-extra-val">Triple IMU · Dual GPS · Motor-out landing capability</span></div>
+    </div>
+  </div>
+
+  <!-- VX-A3 -->
+  <div class="spec-model-panel" id="spec-vxa3" style="display:none">
+    <div class="specs-grid">
+      <div class="spec-card"><div class="spec-val">3<span class="spec-unit">HR</span></div><div class="spec-lbl">Flight Endurance</div><div class="spec-bar"><div class="spec-fill" style="width:95%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">800<span class="spec-unit">AC</span></div><div class="spec-lbl">Per-Flight Coverage</div><div class="spec-bar"><div class="spec-fill" style="width:90%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">2<span class="spec-unit">CM</span></div><div class="spec-lbl">LIDAR Accuracy</div><div class="spec-bar"><div class="spec-fill" style="width:95%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">240</div><div class="spec-lbl">LIDAR pts/m²</div><div class="spec-bar"><div class="spec-fill" style="width:80%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">5</div><div class="spec-lbl">Spectral Bands</div><div class="spec-bar"><div class="spec-fill" style="width:70%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">110<span class="spec-unit">km/h</span></div><div class="spec-lbl">Cruise Speed</div><div class="spec-bar"><div class="spec-fill" style="width:85%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">3<span class="spec-unit">CM</span></div><div class="spec-lbl">GSD at 100m AGL</div><div class="spec-bar"><div class="spec-fill" style="width:92%"></div></div></div>
+      <div class="spec-card"><div class="spec-val">IP44</div><div class="spec-lbl">Weather Rating</div><div class="spec-bar"><div class="spec-fill" style="width:45%"></div></div></div>
+    </div>
+    <div class="spec-extra-row">
+      <div class="spec-extra-item"><span class="spec-extra-lbl">LIDAR</span><span class="spec-extra-val">Livox Mid-100 · 100m range · 240 pts/m² at 80 km/h</span></div>
+      <div class="spec-extra-item"><span class="spec-extra-lbl">Camera</span><span class="spec-extra-val">MicaSense RedEdge-MX · 5-band multispectral + RGB</span></div>
+      <div class="spec-extra-item"><span class="spec-extra-lbl">Propulsion</span><span class="spec-extra-val">Dual brushless pusher/puller · 5200 mAh 6S × 2 batteries</span></div>
+      <div class="spec-extra-item"><span class="spec-extra-lbl">Launch</span><span class="spec-extra-val">VTOL-capable (optional) · Hand/catapult launch · Belly landing</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTORS -->
+<section id="sectors">
+  <div class="sectors-header">
+    <div>
+      <div class="section-label">Industry Verticals</div>
+      <div class="section-title">WHERE WE<br>OPERATE</div>
+    </div>
+    <p class="sectors-intro-p">Six distinct verticals, each with tailored flight profiles, sensor configurations, and output formats. One platform, every application.</p>
+  </div>
+
+  <div class="sectors-card-grid">
+
+    <div class="sector-card" onclick="toggleSector(this)">
+      <div class="sector-card-head">
+        <span class="sector-card-idx">01</span>
+        <span class="sector-card-icon">
+          <svg viewBox="0 0 28 28" fill="none" width="24" height="24"><path d="M14 24 C14 24 4 17 4 10 C4 7 8.5 4 14 4 C19.5 4 24 7 24 10 C24 17 14 24 14 24Z" stroke="#c8ff00" stroke-width="1.2" fill="none"/><circle cx="14" cy="10" r="3" fill="#c8ff00" opacity="0.7"/></svg>
+        </span>
+        <span class="sector-card-name">Agriculture</span>
+        <span class="sector-card-badges"><span class="sector-badge">DaaS</span><span class="sector-badge">SaaS</span></span>
+        <span class="sector-card-toggle">+</span>
+      </div>
+      <div class="sector-card-body">
+        <p>Multispectral scanning for crop stress, NDVI mapping, irrigation gap analysis, pest hotspot identification, and season-over-season yield prediction. Supports rice, cotton, sugarcane, maize, and horticulture.</p>
+        <div class="sector-outcomes">
+          <div class="sector-outcome"><span class="outcome-num">30%</span><span class="outcome-lbl">Avg input cost reduction</span></div>
+          <div class="sector-outcome"><span class="outcome-num">500ac</span><span class="outcome-lbl">Coverage per day</span></div>
+          <div class="sector-outcome"><span class="outcome-num">24h</span><span class="outcome-lbl">Prescription map turnaround</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sector-card" onclick="toggleSector(this)">
+      <div class="sector-card-head">
+        <span class="sector-card-idx">02</span>
+        <span class="sector-card-icon">
+          <svg viewBox="0 0 28 28" fill="none" width="24" height="24"><circle cx="14" cy="14" r="6" stroke="#c8ff00" stroke-width="1.2"/><circle cx="14" cy="14" r="10" stroke="rgba(200,255,0,0.3)" stroke-width="0.8" stroke-dasharray="2 3"/><circle cx="14" cy="14" r="2.5" fill="#c8ff00"/></svg>
+        </span>
+        <span class="sector-card-name">LIDAR Survey</span>
+        <span class="sector-card-badges"><span class="sector-badge">DaaS</span><span class="sector-badge">SaaS</span></span>
+        <span class="sector-card-toggle">+</span>
+      </div>
+      <div class="sector-card-body">
+        <p>Dense point cloud capture for topographic mapping, contour generation, volumetric analysis, and infrastructure clearance. Replaces weeks of ground survey with a single flight day. LAS/LAZ deliverables compatible with all major GIS platforms.</p>
+        <div class="sector-outcomes">
+          <div class="sector-outcome"><span class="outcome-num">±2cm</span><span class="outcome-lbl">Vertical accuracy</span></div>
+          <div class="sector-outcome"><span class="outcome-num">240</span><span class="outcome-lbl">pts/m² density</span></div>
+          <div class="sector-outcome"><span class="outcome-num">80%</span><span class="outcome-lbl">Time saved vs ground survey</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sector-card" onclick="toggleSector(this)">
+      <div class="sector-card-head">
+        <span class="sector-card-idx">03</span>
+        <span class="sector-card-icon">
+          <svg viewBox="0 0 28 28" fill="none" width="24" height="24"><polygon points="14,3 25,9 25,20 14,26 3,20 3,9" stroke="#c8ff00" stroke-width="1.2" fill="none"/><circle cx="14" cy="14" r="2.5" fill="#c8ff00"/></svg>
+        </span>
+        <span class="sector-card-name">3D Mapping</span>
+        <span class="sector-card-badges"><span class="sector-badge">DaaS</span><span class="sector-badge">SaaS</span></span>
+        <span class="sector-card-toggle">+</span>
+      </div>
+      <div class="sector-card-body">
+        <p>Photogrammetric 3D reconstruction of terrain, construction sites, mining operations, and urban environments. Outputs include textured 3D mesh, orthomosaic, and digital surface model — all georeferenced and GIS-ready.</p>
+        <div class="sector-outcomes">
+          <div class="sector-outcome"><span class="outcome-num">&lt;3cm</span><span class="outcome-lbl">Ground sampling distance</span></div>
+          <div class="sector-outcome"><span class="outcome-num">OBJ</span><span class="outcome-lbl">+ LAS + GeoTIFF export</span></div>
+          <div class="sector-outcome"><span class="outcome-num">1000ac</span><span class="outcome-lbl">Max area per mission</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sector-card" onclick="toggleSector(this)">
+      <div class="sector-card-head">
+        <span class="sector-card-idx">04</span>
+        <span class="sector-card-icon">
+          <svg viewBox="0 0 28 28" fill="none" width="24" height="24"><circle cx="14" cy="11" r="6" stroke="#c8ff00" stroke-width="1.2"/><circle cx="14" cy="11" r="2.5" fill="#c8ff00" opacity="0.7"/><path d="M9 19 L5 26" stroke="rgba(200,255,0,0.5)" stroke-width="1" stroke-linecap="round"/><path d="M19 19 L23 26" stroke="rgba(200,255,0,0.5)" stroke-width="1" stroke-linecap="round"/></svg>
+        </span>
+        <span class="sector-card-name">Surveillance</span>
+        <span class="sector-card-badges"><span class="sector-badge">DaaS</span></span>
+        <span class="sector-card-toggle">+</span>
+      </div>
+      <div class="sector-card-body">
+        <p>360° thermal + optical surveillance with AI-driven perimeter breach detection, event security overwatch, and critical infrastructure inspection. Encrypted live video uplink to NOC. Available as 24/7 managed monitoring service.</p>
+        <div class="sector-outcomes">
+          <div class="sector-outcome"><span class="outcome-num">90min</span><span class="outcome-lbl">Continuous patrol</span></div>
+          <div class="sector-outcome"><span class="outcome-num">AI</span><span class="outcome-lbl">Person/vehicle detection</span></div>
+          <div class="sector-outcome"><span class="outcome-num">8km</span><span class="outcome-lbl">Video uplink range</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sector-card" onclick="toggleSector(this)">
+      <div class="sector-card-head">
+        <span class="sector-card-idx">05</span>
+        <span class="sector-card-icon">
+          <svg viewBox="0 0 28 28" fill="none" width="24" height="24"><path d="M4 20 Q8 10 14 8 Q20 10 24 20" stroke="#c8ff00" stroke-width="1.2" fill="none"/><path d="M7 20 Q10 13 14 12 Q18 13 21 20" stroke="rgba(200,255,0,0.4)" stroke-width="0.8" fill="none"/><line x1="4" y1="22" x2="24" y2="22" stroke="rgba(200,255,0,0.3)" stroke-width="0.8"/></svg>
+        </span>
+        <span class="sector-card-name">Forestry</span>
+        <span class="sector-card-badges"><span class="sector-badge">SaaS</span></span>
+        <span class="sector-card-toggle">+</span>
+      </div>
+      <div class="sector-card-body">
+        <p>Canopy height models, individual tree detection, biomass estimation, fire risk mapping, and illegal encroachment detection. Supports forest departments, carbon credit projects, and conservation NGOs.</p>
+        <div class="sector-outcomes">
+          <div class="sector-outcome"><span class="outcome-num">CHM</span><span class="outcome-lbl">Canopy height models</span></div>
+          <div class="sector-outcome"><span class="outcome-num">AGB</span><span class="outcome-lbl">Above-ground biomass</span></div>
+          <div class="sector-outcome"><span class="outcome-num">±0.5m</span><span class="outcome-lbl">Tree height accuracy</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sector-card" onclick="toggleSector(this)">
+      <div class="sector-card-head">
+        <span class="sector-card-idx">06</span>
+        <span class="sector-card-icon">
+          <svg viewBox="0 0 28 28" fill="none" width="24" height="24"><rect x="3" y="8" width="22" height="14" rx="2" stroke="#c8ff00" stroke-width="1.2" fill="none"/><line x1="14" y1="8" x2="14" y2="3" stroke="#c8ff00" stroke-width="1.2"/><rect x="11" y="1" width="6" height="3" rx="1" stroke="rgba(200,255,0,0.5)" stroke-width="0.8" fill="none"/><line x1="8" y1="15" x2="20" y2="15" stroke="rgba(200,255,0,0.4)" stroke-width="0.8"/></svg>
+        </span>
+        <span class="sector-card-name">Infrastructure</span>
+        <span class="sector-card-badges"><span class="sector-badge">DaaS</span></span>
+        <span class="sector-card-toggle">+</span>
+      </div>
+      <div class="sector-card-body">
+        <p>Power-line corridor inspection, bridge structural assessment, oil & gas pipeline monitoring, and solar farm defect detection. Thermal imaging identifies hotspots; LIDAR measures sag and clearance with sub-cm precision.</p>
+        <div class="sector-outcomes">
+          <div class="sector-outcome"><span class="outcome-num">200km</span><span class="outcome-lbl">Power line / day</span></div>
+          <div class="sector-outcome"><span class="outcome-num">Thermal</span><span class="outcome-lbl">Hotspot detection</span></div>
+          <div class="sector-outcome"><span class="outcome-num">70%</span><span class="outcome-lbl">Inspection cost saving</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="display:block;padding:6rem 3rem;background:var(--paper);">
+  <div class="contact-top">
+    <div>
+      <div class="section-label">Get In Touch</div>
+      <div class="section-title">FLY WITH<br>US</div>
+      <p style="font-size:1rem;line-height:1.75;color:var(--muted);max-width:420px;margin-top:1rem;">Whether you need a single survey mission or a full enterprise fleet deployment, our team will scope a solution around your field and timeline within 24 hours.</p>
+    </div>
+    <div class="contact-badges">
+      <div class="contact-badge"><span class="cbadge-val">48h</span><span class="cbadge-lbl">Mission deployment</span></div>
+      <div class="contact-badge"><span class="cbadge-val">24/7</span><span class="cbadge-lbl">Operations support</span></div>
+      <div class="contact-badge"><span class="cbadge-val">DGCA</span><span class="cbadge-lbl">Certified operations</span></div>
+    </div>
+  </div>
+
+  <div class="contact-body">
+    <!-- Left: info + map -->
+    <div class="contact-info-col">
+      <div class="contact-details">
+        <div class="contact-item">
+          <span class="contact-item-label">Email</span>
+          <span class="contact-item-val">hello@AltivionX.in</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-item-label">Phone</span>
+          <span class="contact-item-val">+91 8522896038</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-item-label">HQ</span>
+          <span class="contact-item-val">R-Hub, Ramachandrapuram, Andhra Pradesh 533255</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-item-label">Coverage</span>
+          <span class="contact-item-val">Pan-India</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-item-label">Hours</span>
+          <span class="contact-item-val">Mon–Sat · 8 AM – 7 PM IST</span>
+        </div>
+      </div>
+
+      <!-- Mini map SVG -->
+      <div class="contact-map">
+        <svg viewBox="0 0 340 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%">
+          <rect width="340" height="200" fill="#0d0f16"/>
+          <!-- Grid -->
+          <line x1="0"   y1="50"  x2="340" y2="50"  stroke="rgba(200,255,0,0.05)" stroke-width="0.8"/>
+          <line x1="0"   y1="100" x2="340" y2="100" stroke="rgba(200,255,0,0.05)" stroke-width="0.8"/>
+          <line x1="0"   y1="150" x2="340" y2="150" stroke="rgba(200,255,0,0.05)" stroke-width="0.8"/>
+          <line x1="68"  y1="0"   x2="68"  y2="200" stroke="rgba(200,255,0,0.05)" stroke-width="0.8"/>
+          <line x1="136" y1="0"   x2="136" y2="200" stroke="rgba(200,255,0,0.05)" stroke-width="0.8"/>
+          <line x1="204" y1="0"   x2="204" y2="200" stroke="rgba(200,255,0,0.05)" stroke-width="0.8"/>
+          <line x1="272" y1="0"   x2="272" y2="200" stroke="rgba(200,255,0,0.05)" stroke-width="0.8"/>
+          <!-- India outline rough -->
+          <path d="M100 30 Q130 20 160 28 Q190 36 210 55 Q225 70 220 95 Q215 120 200 140 Q185 160 170 175 Q160 185 155 178 Q140 165 130 148 Q110 120 100 95 Q88 65 100 30Z" stroke="rgba(200,255,0,0.2)" stroke-width="1" fill="rgba(200,255,0,0.03)"/>
+          <!-- AP region highlight -->
+          <ellipse cx="175" cy="145" rx="28" ry="18" fill="rgba(200,255,0,0.07)" stroke="rgba(200,255,0,0.25)" stroke-width="0.8"/>
+          <!-- Ramachandrapuram pin -->
+          <circle cx="168" cy="132" r="8" fill="none" stroke="#c8ff00" stroke-width="1" opacity="0.6"/>
+          <circle cx="168" cy="132" r="4" fill="#c8ff00" opacity="0.9"/>
+          <line x1="168" y1="140" x2="168" y2="152" stroke="#c8ff00" stroke-width="0.8" opacity="0.4"/>
+          <!-- Coverage arcs -->
+          <circle cx="168" cy="132" r="20" stroke="rgba(200,255,0,0.12)" stroke-width="0.8" stroke-dasharray="2 3"/>
+          <circle cx="168" cy="132" r="35" stroke="rgba(200,255,0,0.08)" stroke-width="0.8" stroke-dasharray="2 5"/>
+          <!-- Label -->
+          <text x="180" y="128" fill="rgba(200,255,0,0.7)" font-size="7" font-family="monospace">Ramachandrapuram HQ</text>
+          <text x="10" y="190" fill="rgba(200,255,0,0.25)" font-size="6" font-family="monospace">COVERAGE · PAN-INDIA · SOUTHEAST ASIA</text>
+        </svg>
+      </div>
+
+      <!-- Social links -->
+      <div class="contact-social">
+        <span style="font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);">Connect</span>
+        <div class="social-links">
+          <a href="#" class="social-link">LinkedIn</a>
+          <a href="#" class="social-link">Twitter / X</a>
+          <a href="#" class="social-link">Instagram</a>
+          <a href="#" class="social-link">YouTube</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: form -->
+    <div class="contact-form-col">
+      <div class="form-section-label">Mission Enquiry</div>
+      <form class="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-field">
+            <label for="fname">First Name *</label>
+            <input type="text" id="fname" placeholder="Arjun" required>
+          </div>
+          <div class="form-field">
+            <label for="lname">Last Name</label>
+            <input type="text" id="lname" placeholder="Reddy">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="email">Work Email *</label>
+            <input type="email" id="email" placeholder="arjun@company.com" required>
+          </div>
+          <div class="form-field">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" placeholder="+91 98765 43210">
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="org">Organisation / Farm Name</label>
+          <input type="text" id="org" placeholder="Company or farm name">
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="service">Service Interest *</label>
+            <select id="service" required>
+              <option value="">Select a service...</option>
+              <option>Drone as a Service (DaaS)</option>
+              <option>Software as a Service (SaaS)</option>
+              <option>Precision Agriculture</option>
+              <option>LIDAR Surveying</option>
+              <option>3D Aerial Mapping</option>
+              <option>Surveillance &amp; Security</option>
+              <option>Last-mile Delivery</option>
+              <option>Multiple / Custom</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="area">Area / Scale</label>
+            <select id="area">
+              <option value="">Select scale...</option>
+              <option>&lt; 100 acres</option>
+              <option>100 – 500 acres</option>
+              <option>500 – 2,000 acres</option>
+              <option>2,000+ acres</option>
+              <option>Infrastructure / Security</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="state">State / Region</label>
+          <input type="text" id="state" placeholder="e.g. Andhra Pradesh, Karnataka">
+        </div>
+        <div class="form-field">
+          <label for="msg">Mission Brief *</label>
+          <textarea id="msg" rows="4" placeholder="Describe your project, area of interest, key objectives, and timeline. The more detail you share, the faster we can respond with a proposal." required></textarea>
+        </div>
+        <div class="form-row" style="align-items:center;gap:1.5rem;">
+          <button type="submit" class="submit-btn" id="submit-btn">Submit Enquiry →</button>
+          <span style="font-family:'Space Mono',monospace;font-size:0.58rem;color:var(--muted);letter-spacing:0.08em;">Response within 24 hours</span>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">Altivion<span>X</span></div>
+    <p style="margin-top:0.5rem;">3D Drone Intelligence — Ramachandrapuram, India</p>
+  </div>
+  <div class="footer-links">
+    <a href="#services">Services</a>
+    <a href="#about">Technology</a>
+    <a href="#sectors">Sectors</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <p>© 2026 AltivionX. All rights reserved.</p>
+</footer>
+
+<script>
+  function switchSpecTab(model, btn) {
+    document.querySelectorAll('.spec-model-panel').forEach(p => p.style.display = 'none');
+    document.querySelectorAll('.spec-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('spec-'+model).style.display = 'block';
+    btn.classList.add('active');
+    // re-trigger bar animation
+    const bars = document.querySelectorAll('#spec-'+model+' .spec-fill');
+    bars.forEach(b => {
+      const w = b.style.width; b.style.width = '0';
+      requestAnimationFrame(() => requestAnimationFrame(() => { b.style.width = w; }));
+    });
+  }
+
+  function toggleSector(card) {
+    const isOpen = card.classList.contains('open');
+    document.querySelectorAll('.sector-card.open').forEach(c => c.classList.remove('open'));
+    if (!isOpen) card.classList.add('open');
+  }
+
+
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = 'Request Sent ✓';
+      btn.style.background = '#1a4a1a';
+      btn.style.color = '#a8ff00';
+    }, 1200);
+
+  // Animate spec bars on scroll
+  const bars = document.querySelectorAll('.spec-fill');
+  const widths = [];
+  bars.forEach(b => { widths.push(b.style.width); b.style.width = '0'; });
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        bars.forEach((b, i) => { setTimeout(() => { b.style.width = widths[i]; }, i * 80); });
+        obs.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  const specsSection = document.querySelector('#specs');
+  if (specsSection) obs.observe(specsSection);
+</script>
+</body>
+</html>
